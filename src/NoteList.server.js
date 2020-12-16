@@ -8,6 +8,8 @@
 
 import {fetch} from 'react-fetch';
 
+import SidebarNote from './SidebarNote';
+
 export default function NoteList() {
   const notes = fetch('http://localhost:4000/notes').json();
 
@@ -15,13 +17,7 @@ export default function NoteList() {
     <ul className="notes-list">
       {notes.map((note) => (
         <li key={note.id}>
-          <div className="sidebar-note-list-item">
-            <header className="sidebar-note-header">
-              <strong>{note.title}</strong>
-              <small>{note.updated_at}</small>
-            </header>
-            <button className="sidebar-note-open" />
-          </div>
+          <SidebarNote note={note} />
         </li>
       ))}
     </ul>
