@@ -22,13 +22,19 @@ export default function Note({selectedId, isEditing}) {
       : null;
 
   if (note === null) {
-    return (
-      <div className="note--empty-state">
-        <span className="note-text--empty-state">
-          Click a note on the left to view something! 🥺
-        </span>
-      </div>
-    );
+    if (isEditing) {
+      return (
+        <NoteEditor noteId={null} initialTitle="Untitled" initialBody="" />
+      );
+    } else {
+      return (
+        <div className="note--empty-state">
+          <span className="note-text--empty-state">
+            Click a note on the left to view something! 🥺
+          </span>
+        </div>
+      );
+    }
   }
 
   let {id, title, body, updated_at} = note;

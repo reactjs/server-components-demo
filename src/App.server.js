@@ -8,6 +8,7 @@
 
 import Note from './Note.server';
 import NoteList from './NoteList.server';
+import EditButton from './EditButton.client';
 
 export default function App({selectedId, isEditing}) {
   return (
@@ -24,7 +25,16 @@ export default function App({selectedId, isEditing}) {
           />
           <strong>React Notes</strong>
         </section>
-        <nav>
+        <section className="sidebar-menu" role="menubar">
+          <form className="search" role="search">
+            <label className="offscreen" htmlFor="sidebar-search-input">
+              Search for a note by title
+            </label>
+            <input id="sidebar-search-input" placeholder="Search" />
+          </form>
+          <EditButton noteId={null}>New</EditButton>
+        </section>
+        <nav role="navigation">
           <NoteList />
         </nav>
       </section>
