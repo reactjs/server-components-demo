@@ -7,7 +7,9 @@
  */
 
 import {fetch} from 'react-fetch';
+import {readFile} from 'react-fs';
 import {format} from 'date-fns';
+import path from 'path';
 
 import TextWithMarkdown from './TextWithMarkdown';
 
@@ -27,8 +29,9 @@ export default function Note({selectedId}) {
     );
   }
 
-  let {id, title, body, updated_at} = note;
+  let {id, title, updated_at} = note;
   const updatedAt = new Date(updated_at);
+  const body = readFile(path.resolve(`./notes/${note.id}.md`), 'utf8');
 
   return (
     <div className="note">
