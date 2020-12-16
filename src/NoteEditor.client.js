@@ -23,6 +23,10 @@ export default function NoteEditor({noteId, initialTitle, initialBody}) {
     endpoint: noteId !== null ? `/notes/${noteId}` : `/notes`,
     method: noteId !== null ? 'PUT' : 'POST',
   });
+  const [isDeleting, deleteNote] = useMutation({
+    endpoint: `/notes/${noteId}`,
+    method: 'DELETE',
+  });
 
   async function handleSave() {
     const payload = {title, body};
@@ -32,6 +36,17 @@ export default function NoteEditor({noteId, initialTitle, initialBody}) {
       searchText: location.searchText,
     };
     const response = await saveNote(payload, requestedLocation);
+    navigate(response);
+  }
+
+  async function handleDelete() {
+    const payload = {};
+    const requestedLocation = {
+      selectedId: null,
+      isEditing: false,
+      searchText: location.searchText,
+    };
+    const response = await deleteNote(payload, requestedLocation);
     navigate(response);
   }
 
@@ -90,6 +105,22 @@ export default function NoteEditor({noteId, initialTitle, initialBody}) {
             />
             Done
           </button>
+          {!isDraft && (
+            <button
+              className="note-editor-delete"
+              disabled={isDeleting || isNavigating}
+              onClick={() => handleDelete()}
+              role="menuitem">
+              <img
+                src="cross.svg"
+                width="10px"
+                height="10px"
+                alt=""
+                role="presentation"
+              />
+              Delete
+            </button>
+          )}
         </div>
         <div className="label label--preview" role="status">
           Preview
