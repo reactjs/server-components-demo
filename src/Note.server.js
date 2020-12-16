@@ -11,8 +11,9 @@ import {readFile} from 'react-fs';
 import {format} from 'date-fns';
 import path from 'path';
 
-import TextWithMarkdown from './TextWithMarkdown';
+import NotePreview from './NotePreview';
 import EditButton from './EditButton.client';
+import NoteEditor from './NoteEditor.client';
 
 export default function Note({selectedId, isEditing}) {
   const note =
@@ -37,7 +38,7 @@ export default function Note({selectedId, isEditing}) {
   // body = readFile(path.resolve(`./notes/${note.id}.md`), 'utf8');
 
   if (isEditing) {
-    return <div>Editing: {note.title}</div>;
+    return <NoteEditor noteId={id} initialTitle={title} initialBody={body} />;
   } else {
     return (
       <div className="note">
@@ -50,9 +51,7 @@ export default function Note({selectedId, isEditing}) {
             <EditButton noteId={id}>Edit</EditButton>
           </div>
         </div>
-        <div className="note-preview">
-          <TextWithMarkdown text={body} />
-        </div>
+        <NotePreview body={body} />
       </div>
     );
   }
