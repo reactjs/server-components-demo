@@ -6,9 +6,10 @@
  *
  */
 
+import Note from './Note.server';
 import NoteList from './NoteList.server';
 
-export default function App() {
+export default function App({selectedId}) {
   return (
     <div className="main">
       <section className="col sidebar">
@@ -27,12 +28,8 @@ export default function App() {
           <NoteList />
         </nav>
       </section>
-      <section className="col note-viewer">
-        <div className="note--empty-state">
-          <span className="note-text--empty-state">
-            We haven't built this yet!
-          </span>
-        </div>
+      <section key={selectedId} className="col note-viewer">
+        <Note selectedId={selectedId} />
       </section>
     </div>
   );

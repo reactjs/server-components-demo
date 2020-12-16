@@ -38,6 +38,7 @@ export default function SidebarNote({id, children, expandedChildren}) {
         onClick={() => {
           startTransition(() => {
             setLocation((loc) => ({
+              ...loc,
               selectedId: id,
             }));
           });
