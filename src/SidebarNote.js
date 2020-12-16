@@ -7,19 +7,24 @@
  */
 
 import {format, isToday} from 'date-fns';
+import excerpts from 'excerpts';
+import marked from 'marked';
+
+import ClientSidebarNote from './SidebarNote.client';
 
 export default function SidebarNote({note}) {
   const updatedAt = new Date(note.updated_at);
   const lastUpdatedAt = isToday(updatedAt)
     ? format(updatedAt, 'h:mm bb')
     : format(updatedAt, 'M/d/yy');
+  const summary = excerpts(marked(note.body), {words: 20});
   return (
-    <div className="sidebar-note-list-item">
+    <ClientSidebarNote id={note.id}>
       <header className="sidebar-note-header">
         <strong>{note.title}</strong>
         <small>{lastUpdatedAt}</small>
       </header>
       <button className="sidebar-note-open" />
-    </div>
+    </ClientSidebarNote>
   );
 }
