@@ -6,7 +6,7 @@
  *
  */
 
-import NoteList from './NoteList.client';
+import NoteList from './NoteList.server';
 
 export default function App() {
   return (
