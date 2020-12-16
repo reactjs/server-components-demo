@@ -12,8 +12,9 @@ import {format} from 'date-fns';
 import path from 'path';
 
 import TextWithMarkdown from './TextWithMarkdown';
+import EditButton from './EditButton.client';
 
-export default function Note({selectedId}) {
+export default function Note({selectedId, isEditing}) {
   const note =
     selectedId != null
       ? fetch(`http://localhost:4000/notes/${selectedId}`).json()
@@ -29,24 +30,30 @@ export default function Note({selectedId}) {
     );
   }
 
-  let {id, title, updated_at} = note;
+  let {id, title, body, updated_at} = note;
   const updatedAt = new Date(updated_at);
-  const body = readFile(path.resolve(`./notes/${note.id}.md`), 'utf8');
 
-  return (
-    <div className="note">
-      <div className="note-header">
-        <h1 className="note-title">{title}</h1>
-        <div className="note-menu" role="menubar">
-          <small className="note-updated-at" role="status">
-            Last updated on {format(updatedAt, "d MMM yyyy 'at' h:mm bb")}
-          </small>
-          <button className="edit-button">Edit</button>
+  // We could also read from a file instead.
+  // body = readFile(path.resolve(`./notes/${note.id}.md`), 'utf8');
+
+  if (isEditing) {
+    return <div>Editing: {note.title}</div>;
+  } else {
+    return (
+      <div className="note">
+        <div className="note-header">
+          <h1 className="note-title">{title}</h1>
+          <div className="note-menu" role="menubar">
+            <small className="note-updated-at" role="status">
+              Last updated on {format(updatedAt, "d MMM yyyy 'at' h:mm bb")}
+            </small>
+            <EditButton noteId={id}>Edit</EditButton>
+          </div>
+        </div>
+        <div className="note-preview">
+          <TextWithMarkdown text={body} />
         </div>
       </div>
-      <div className="note-preview">
-        <TextWithMarkdown text={body} />
-      </div>
-    </div>
-  );
+    );
+  }
 }

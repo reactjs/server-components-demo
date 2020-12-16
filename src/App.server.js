@@ -9,7 +9,7 @@
 import Note from './Note.server';
 import NoteList from './NoteList.server';
 
-export default function App({selectedId}) {
+export default function App({selectedId, isEditing}) {
   return (
     <div className="main">
       <section className="col sidebar">
@@ -29,7 +29,7 @@ export default function App({selectedId}) {
         </nav>
       </section>
       <section key={selectedId} className="col note-viewer">
-        <Note selectedId={selectedId} />
+        <Note selectedId={selectedId} isEditing={isEditing} />
       </section>
     </div>
   );
