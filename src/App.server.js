@@ -11,7 +11,7 @@ import NoteList from './NoteList.server';
 import EditButton from './EditButton.client';
 import SearchField from './SearchField.client';
 
-export default function App({selectedId, isEditing}) {
+export default function App({selectedId, isEditing, searchText}) {
   return (
     <div className="main">
       <section className="col sidebar">
@@ -31,7 +31,7 @@ export default function App({selectedId, isEditing}) {
           <EditButton noteId={null}>New</EditButton>
         </section>
         <nav>
-          <NoteList />
+          <NoteList searchText={searchText} />
         </nav>
       </section>
       <section key={selectedId} className="col note-viewer">

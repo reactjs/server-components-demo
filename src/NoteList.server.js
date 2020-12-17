@@ -8,10 +8,17 @@
 
 import {fetch} from 'react-fetch';
 
+import {db} from './db.server';
 import SidebarNote from './SidebarNote';
 
-export default function NoteList() {
-  const notes = fetch('http://localhost:4000/notes').json();
+export default function NoteList({searchText}) {
+  // WARNING: This is for demo purposes only.
+  // We don't encourage this in real apps. There are far safer ways to access
+  // data in a real application!
+  const notes = db.query(
+    `SELECT * FROM notes WHERE title ilike $1 order by updated_at desc`,
+    ['%' + searchText + '%']
+  ).rows;
 
   return notes.length > 0 ? (
     <ul className="notes-list">
