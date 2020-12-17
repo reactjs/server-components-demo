@@ -21,6 +21,7 @@ export default function SidebarNote({note}) {
   return (
     <ClientSidebarNote
       id={note.id}
+      title={note.title}
       expandedChildren={
         <p className="sidebar-note-excerpt">{summary || <i>(No content)</i>}</p>
       }>
@@ -28,7 +29,6 @@ export default function SidebarNote({note}) {
         <strong>{note.title}</strong>
         <small>{lastUpdatedAt}</small>
       </header>
-      <button className="sidebar-note-open" />
     </ClientSidebarNote>
   );
 }

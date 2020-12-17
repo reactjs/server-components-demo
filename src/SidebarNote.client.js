@@ -6,18 +6,32 @@
  *
  */
 
-import {useState, unstable_useTransition} from 'react';
+import {useState, useRef, useEffect, unstable_useTransition} from 'react';
 
 import {useLocation} from './LocationContext.client';
 
-export default function SidebarNote({id, children, expandedChildren}) {
+export default function SidebarNote({id, title, children, expandedChildren}) {
   const [location, setLocation] = useLocation();
   const [startTransition, isPending] = unstable_useTransition();
   const [isExpanded, setIsExpanded] = useState(false);
   const isActive = id === location.selectedId;
 
+  // Animate after title is edited.
+  const itemRef = useRef(null);
+  const prevTitleRef = useRef(title);
+  useEffect(() => {
+    if (title !== prevTitleRef.current) {
+      prevTitleRef.current = title;
+      itemRef.current.classList.add('flash');
+    }
+  }, [title]);
+
   return (
     <div
+      ref={itemRef}
+      onAnimationEnd={() => {
+        itemRef.current.classList.remove('flash');
+      }}
       className={[
         'sidebar-note-list-item',
         isExpanded ? 'note-expanded' : '',
@@ -38,8 +52,9 @@ export default function SidebarNote({id, children, expandedChildren}) {
         onClick={() => {
           startTransition(() => {
             setLocation((loc) => ({
-              ...loc,
               selectedId: id,
+              isEditing: false,
+              searchText: loc.searchText,
             }));
           });
         }}>

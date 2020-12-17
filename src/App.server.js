@@ -6,10 +6,14 @@
  *
  */
 
+import {Suspense} from 'react';
+
 import Note from './Note.server';
 import NoteList from './NoteList.server';
 import EditButton from './EditButton.client';
 import SearchField from './SearchField.client';
+import NoteSkeleton from './NoteSkeleton';
+import NoteListSkeleton from './NoteListSkeleton';
 
 export default function App({selectedId, isEditing, searchText}) {
   return (
@@ -31,11 +35,15 @@ export default function App({selectedId, isEditing, searchText}) {
           <EditButton noteId={null}>New</EditButton>
         </section>
         <nav>
-          <NoteList searchText={searchText} />
+          <Suspense fallback={<NoteListSkeleton />}>
+            <NoteList searchText={searchText} />
+          </Suspense>
         </nav>
       </section>
       <section key={selectedId} className="col note-viewer">
-        <Note selectedId={selectedId} isEditing={isEditing} />
+        <Suspense fallback={<NoteSkeleton isEditing={isEditing} />}>
+          <Note selectedId={selectedId} isEditing={isEditing} />
+        </Suspense>
       </section>
     </div>
   );

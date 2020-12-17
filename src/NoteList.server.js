@@ -12,13 +12,18 @@ import {db} from './db.server';
 import SidebarNote from './SidebarNote';
 
 export default function NoteList({searchText}) {
+  // const notes = fetch('http://localhost:4000/notes').json();
+
   // WARNING: This is for demo purposes only.
   // We don't encourage this in real apps. There are far safer ways to access
   // data in a real application!
   const notes = db.query(
-    `SELECT * FROM notes WHERE title ilike $1 order by updated_at desc`,
+    `select * from notes where title ilike $1 order by id desc`,
     ['%' + searchText + '%']
   ).rows;
+
+  // Now let's see how the Suspense boundary above lets us not block on this.
+  // fetch('http://localhost:4000/sleep/3000');
 
   return notes.length > 0 ? (
     <ul className="notes-list">
@@ -29,6 +34,10 @@ export default function NoteList({searchText}) {
       ))}
     </ul>
   ) : (
-    <div className="notes-empty">No notes created yet!</div>
+    <div className="notes-empty">
+      {searchText
+        ? `Couldn't find any notes titled "${searchText}".`
+        : 'No notes created yet!'}{' '}
+    </div>
   );
 }

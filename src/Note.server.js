@@ -11,6 +11,7 @@ import {readFile} from 'react-fs';
 import {format} from 'date-fns';
 import path from 'path';
 
+import {db} from './db.server';
 import NotePreview from './NotePreview';
 import EditButton from './EditButton.client';
 import NoteEditor from './NoteEditor.client';
@@ -42,6 +43,9 @@ export default function Note({selectedId, isEditing}) {
 
   // We could also read from a file instead.
   // body = readFile(path.resolve(`./notes/${note.id}.md`), 'utf8');
+
+  // Now let's see how the Suspense boundary above lets us not block on this.
+  // fetch('http://localhost:4000/sleep/3000');
 
   if (isEditing) {
     return <NoteEditor noteId={id} initialTitle={title} initialBody={body} />;
