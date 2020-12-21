@@ -23,6 +23,8 @@ Server Components are an experimental feature and **are not ready for adoption**
 
 ## Setup
 
+You will need to have nodejs >=14.9.0 in order to run this demo. [Node 14 LTS](https://nodejs.org/en/about/releases/) is a good choice!
+
   ```
   npm install
   npm start
@@ -37,6 +39,8 @@ The app won't work until you set up the database, as described below.
 ## DB Setup
 
 This demo uses Postgres. First, follow its [installation link](https://wiki.postgresql.org/wiki/Detailed_installation_guides) for your platform.
+
+Alternatively you can check out this [fork](https://github.com/pomber/server-components-demo/) which will let you run the demo app without needing a database. However you won't be able to execute SQL queries, but fetch should still work.
 
 The below example will setup the database for this app, assuming that you have a UNIX-like platform:
 
