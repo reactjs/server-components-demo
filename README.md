@@ -19,7 +19,7 @@ This is a demo app built with Server Components, an experimental React feature. 
 
 ## When will I be able to use this?
 
-Server Components are an experimental feature and **are not ready for adoption**. For now, we recommend experimenting w Server Components via this demo app. **Use this in your own projects at your own risk.**
+Server Components are an experimental feature and **are not ready for adoption**. For now, we recommend experimenting w Server Components via this demo app. **Use this in your projects at your own risk.**
 
 ## Setup
 
@@ -38,7 +38,7 @@ The app won't work until you set up the database, as described below.
 
 This demo uses Postgres. First, follow its [installation link](https://wiki.postgresql.org/wiki/Detailed_installation_guides) for your platform.
 
-The below example will setup the database for this app, assuming that you have a UNIX-like platform:
+The below example will set up the database for this app, assuming that you have a UNIX-like platform:
 
 ### Step 1. Create the Database
 
@@ -79,7 +79,7 @@ And you're done!
 
 ## Notes about this app
 
-The demo is a note taking app called **React Notes**. It consists of a few major parts:
+The demo is a note-taking app called **React Notes**. It consists of a few major parts:
 
 - It uses a Webpack plugin (not defined in this repo) that allows us to only include client components in build artifacts
 - An Express server that:
@@ -91,7 +91,7 @@ This demo is built on top of our Webpack plugin, but this is not how we envision
 
 ### Interesting things to try
 
-- Expand note(s) by hovering over the note in the sidebar, and clicking the expand/collapse toggle. Next create or delete a note. What happens to the expanded notes?
+- Expand note(s) by hovering over the note in the sidebar, and clicking the expand/collapse toggle. Next, create or delete a note. What happens to the expanded notes?
 - Change a note's title while editing, and notice how editing an existing item animates in the sidebar. What happens if you edit a note in the middle of the list?
 - Search for any title. With the search text still in the search input, create a new note with a title matching the search text. What happens?
 - Search while on Slow 3G, observe the inline loading indicator.
