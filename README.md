@@ -23,6 +23,8 @@ Server Components are an experimental feature and **are not ready for adoption**
 
 ## Setup
 
+You will need to have nodejs >=14.9.0 in order to run this demo. [Node 14 LTS](https://nodejs.org/en/about/releases/) is a good choice!
+
   ```
   npm install
   npm start
