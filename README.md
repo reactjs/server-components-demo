@@ -19,7 +19,7 @@ This is a demo app built with Server Components, an experimental React feature. 
 
 ## When will I be able to use this?
 
-Server Components are an experimental feature and **are not ready for adoption**. For now, we recommend experimenting w Server Components via this demo app. **Use this in your projects at your own risk.**
+Server Components are an experimental feature and **are not ready for adoption**. For now, we recommend experimenting with Server Components via this demo app. **Use this in your projects at your own risk.**
 
 ## Setup
 
