@@ -40,6 +40,8 @@ The app won't work until you set up the database, as described below.
 
 This demo uses Postgres. First, follow its [installation link](https://wiki.postgresql.org/wiki/Detailed_installation_guides) for your platform.
 
+Alternatively you can check out this [fork](https://github.com/pomber/server-components-demo/) which will let you run the demo app without needing a database. However you won't be able to execute SQL queries, but fetch should still work.
+
 The below example will setup the database for this app, assuming that you have a UNIX-like platform:
 
 ### Step 1. Create the Database
