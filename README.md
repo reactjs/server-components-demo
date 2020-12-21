@@ -9,7 +9,7 @@
   + [Step 3. Run the seed script](#step-3-run-the-seed-script)
 * [Notes about this app](#notes-about-this-app)
   + [Interesting things to try](#interesting-things-to-try)
-* [Built by (A-Z)](#built-by--a-z)
+* [Built by (A-Z)](#built-by-a-z)
 * [Code of Conduct](#code-of-conduct)
 * [License](#license)
 
