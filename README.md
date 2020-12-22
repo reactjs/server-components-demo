@@ -118,6 +118,8 @@ This demo is built on top of our Webpack plugin, but this is not how we envision
   - If you uncomment it in both, it won't be very interesting because we have nothing new to show until they both respond.
 - Add a new Server Component and place it above the search bar in `App.server.js`. Import `db` from `db.server` and use `db.query()` from it to get the number of notes. Oberserve what happens when you add or delete a note.
 
+You can watch a [recorded walkthrough of all these demo points here](https://youtu.be/La4agIEgoNg?t=600) (with timestamps).
+
 ## Built by (A-Z)
 
 - [Andrew Clark](https://twitter.com/acdlite)
