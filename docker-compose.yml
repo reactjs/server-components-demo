@@ -3,8 +3,8 @@ services:
   postgres:
     image: postgres:13
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: notesadmin
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: notesapi
     ports:
       - '5432:5432'
