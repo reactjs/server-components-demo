@@ -23,6 +23,8 @@ Server Components are an experimental feature and **are not ready for adoption**
 
 ## Setup
 
+You will need to have nodejs >=14.9.0 in order to run this demo. [Node 14 LTS](https://nodejs.org/en/about/releases/) is a good choice!
+
   ```
   npm install
   npm start
@@ -34,9 +36,23 @@ Then open http://localhost:4000.
 
 The app won't work until you set up the database, as described below.
 
+<details>
+  <summary>Setup with Docker</summary>
+  <p>You can also start dev build of the app by using docker-compose.</p>
+  <p>Make sure you have docker and docker-compose installed then run:</p>
+  <pre><code>docker-compose up</code></pre>
+  <h4>Running seed script</h4>
+  <p>1. Run containers in the detached mode</p>
+  <pre><code>docker-compose up -d</code></pre>
+  <p>2. Run seed script</p>
+  <pre><code>docker-compose exec notes-app npm run seed</code></pre>
+</details>
+
 ## DB Setup
 
 This demo uses Postgres. First, follow its [installation link](https://wiki.postgresql.org/wiki/Detailed_installation_guides) for your platform.
+
+Alternatively, you can check out this [fork](https://github.com/pomber/server-components-demo/) which will let you run the demo app without needing a database. However, you won't be able to execute SQL queries (but fetch should still work).
 
 The below example will set up the database for this app, assuming that you have a UNIX-like platform:
 
@@ -96,7 +112,11 @@ This demo is built on top of our Webpack plugin, but this is not how we envision
 - Search for any title. With the search text still in the search input, create a new note with a title matching the search text. What happens?
 - Search while on Slow 3G, observe the inline loading indicator.
 - Switch between two notes back and forth. Observe we don't send new responses next time we switch them again.
-- Uncomment the `fetch('http://localhost:4000/sleep/....')` calls in `NoteServer.js` and/or `NoteList.server.js` to introduce an artificial delay and trigger Suspense.
+- Uncomment the `fetch('http://localhost:4000/sleep/....')` call in `Note.server.js` or `NoteList.server.js` to introduce an artificial delay and trigger Suspense.
+  - If you only uncomment it in `Note.server.js`, you'll see the fallback every time you open a note.
+  - If you only uncomment it in `NoteList.server.js`, you'll see the list fallback on first page load.
+  - If you uncomment it in both, it won't be very interesting because we have nothing new to show until they both respond.
+- Add a new Server Component and place it above the search bar in `App.server.js`. Import `db` from `db.server` and use `db.query()` from it to get the number of notes. Oberserve what happens when you add or delete a note.
 
 ## Built by (A-Z)
 

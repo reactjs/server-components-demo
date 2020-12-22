@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: notesapi
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./scripts/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
+      - db:/var/lib/postgresql/data
+
+  notes-app:
+    build:
+      context: .
+    depends_on:
+      - postgres
+    ports:
+      - '4000:4000'
+    network_mode: host
+    volumes:
+    - ./notes:/opt/notes-app/notes
+    - ./public:/opt/notes-app/public
+    - ./scripts:/opt/notes-app/scripts
+    - ./server:/opt/notes-app/server
+    - ./src:/opt/notes-app/src
+    - ./credentials.json:/opt/notes-app/credentials.json
+
+volumes:
+  db:
