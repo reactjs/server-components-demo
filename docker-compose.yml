@@ -15,8 +15,6 @@ services:
   notes-app:
     build:
       context: .
-    command:
-      - start
     depends_on:
       - postgres
     ports:

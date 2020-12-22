@@ -1,3 +1,7 @@
-const credentials = require('./credentials.json');
-credentials['host'] = process.env.DB_HOST || credentials['host'];
-module.exports = credentials;
+module.exports = {
+  host: process.env.DB_HOST || 'localhost',
+  database: 'notesapi',
+  user: 'notesadmin',
+  password: 'password',
+  port: '5432',
+};
