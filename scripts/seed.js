@@ -13,7 +13,7 @@ const path = require('path');
 const {Pool} = require('pg');
 const {readdir, unlink, writeFile} = require('fs/promises');
 const startOfYear = require('date-fns/startOfYear');
-const credentials = require('../credentials.json');
+const credentials = require('../credentials');
 
 const NOTES_PATH = './notes';
 const pool = new Pool(credentials);

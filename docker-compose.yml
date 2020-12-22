@@ -19,14 +19,15 @@ services:
       - postgres
     ports:
       - '4000:4000'
-    network_mode: host
+    environment:
+      DB_HOST: postgres
     volumes:
-    - ./notes:/opt/notes-app/notes
-    - ./public:/opt/notes-app/public
-    - ./scripts:/opt/notes-app/scripts
-    - ./server:/opt/notes-app/server
-    - ./src:/opt/notes-app/src
-    - ./credentials.json:/opt/notes-app/credentials.json
+      - ./notes:/opt/notes-app/notes
+      - ./public:/opt/notes-app/public
+      - ./scripts:/opt/notes-app/scripts
+      - ./server:/opt/notes-app/server
+      - ./src:/opt/notes-app/src
+      - ./credentials.js:/opt/notes-app/credentials.js
 
 volumes:
   db:
