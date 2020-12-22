@@ -36,6 +36,18 @@ Then open http://localhost:4000.
 
 The app won't work until you set up the database, as described below.
 
+<details>
+  <summary>Setup with Docker</summary>
+  <p>You can also start dev build of the app by using docker-compose.</p>
+  <p>Make sure you have docker and docker-compose installed then run:</p>
+  <pre><code>docker-compose up</code></pre>
+  <h4>Running seed script</h4>
+  <p>1. Run containers in the detached mode</p>
+  <pre><code>docker-compose up -d</code></pre>
+  <p>2. Run seed script</p>
+  <pre><code>docker-compose exec notes-app npm run seed</code></pre>
+</details>
+
 ## DB Setup
 
 This demo uses Postgres. First, follow its [installation link](https://wiki.postgresql.org/wiki/Detailed_installation_guides) for your platform.
