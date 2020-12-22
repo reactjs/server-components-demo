@@ -34,15 +34,16 @@
     "webpack-cli": "^4.2.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "prettier": "1.19.1"
   },
   "scripts": {
     "start": "concurrently \"npm run server:dev\" \"npm run bundler:dev\"",
     "start:prod": "concurrently \"npm run server:prod\" \"npm run bundler:prod\"",
-    "server:dev": "NODE_ENV=development nodemon -- --conditions=react-server server",
-    "server:prod": "NODE_ENV=production nodemon -- --conditions=react-server server",
-    "bundler:dev": "NODE_ENV=development nodemon -- scripts/build.js",
-    "bundler:prod": "NODE_ENV=production nodemon -- scripts/build.js",
+    "server:dev": "cross-env NODE_ENV=development nodemon -- --conditions=react-server server",
+    "server:prod": "cross-env NODE_ENV=production nodemon -- --conditions=react-server server",
+    "bundler:dev": "cross-env NODE_ENV=development nodemon -- scripts/build.js",
+    "bundler:prod": "cross-env NODE_ENV=production nodemon -- scripts/build.js",
     "prettier": "prettier --write **/*.js",
     "seed": "node ./scripts/seed.js"
   },
