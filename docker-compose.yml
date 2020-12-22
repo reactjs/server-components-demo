@@ -19,7 +19,6 @@ services:
       - postgres
     ports:
       - '4000:4000'
-    network_mode: host
     volumes:
     - ./notes:/opt/notes-app/notes
     - ./public:/opt/notes-app/public
