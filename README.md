@@ -97,7 +97,7 @@ And you're done!
 
 The demo is a note-taking app called **React Notes**. It consists of a few major parts:
 
-- It uses a Webpack plugin (not defined in this repo) that allows us to only include client components in build artifacts
+- It uses our Webpack plugin react-server-dom-webpack ([repo](https://github.com/facebook/react/tree/99554dc36fa9f5ef29b75dd59836dcc720d831b9/packages/react-server-dom-webpack), [npm](https://www.npmjs.com/package/react-server-dom-webpack)) that allows us to only include client components in build artifacts
 - An Express server that:
   - Serves API endpoints used in the app
   - Renders Server Components into a special format that we can read on the client
