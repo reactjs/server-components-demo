@@ -21,6 +21,7 @@ services:
       - '4000:4000'
     environment:
       DB_HOST: postgres
+      PORT: 4000
     volumes:
       - ./notes:/opt/notes-app/notes
       - ./public:/opt/notes-app/public
