@@ -26,6 +26,14 @@ export default function SidebarNote({id, title, children, expandedChildren}) {
     }
   }, [title]);
 
+  let noteBackgroundColor = '';
+  if (isActive) {
+    noteBackgroundColor = 'var(--tertiary-blue)';
+  }
+  if (isPending) {
+    noteBackgroundColor = 'var(--gray-80)';
+  }
+
   return (
     <div
       ref={itemRef}
@@ -40,11 +48,7 @@ export default function SidebarNote({id, title, children, expandedChildren}) {
       <button
         className="sidebar-note-open"
         style={{
-          backgroundColor: isPending
-            ? 'var(--gray-80)'
-            : isActive
-            ? 'var(--tertiary-blue)'
-            : '',
+          backgroundColor: noteBackgroundColor,
           border: isActive
             ? '1px solid var(--primary-border)'
             : '1px solid transparent',

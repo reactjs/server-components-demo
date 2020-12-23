@@ -140,7 +140,7 @@ function useMutation({endpoint, method}) {
     // Let the nearest error boundary handle errors while saving.
     throw error;
   }
-
+  // eslint-disable-next-line consistent-return
   async function performMutation(payload, requestedLocation) {
     setIsSaving(true);
     try {

@@ -6,6 +6,7 @@
  *
  */
 
+// eslint-disable-next-line no-unused-vars
 import {fetch} from 'react-fetch';
 
 import {db} from './db.server';

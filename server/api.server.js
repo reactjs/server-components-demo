@@ -42,6 +42,7 @@ app.listen(PORT, () => {
 });
 
 function handleErrors(fn) {
+  // eslint-disable-next-line consistent-return
   return async function(req, res, next) {
     try {
       return await fn(req, res);

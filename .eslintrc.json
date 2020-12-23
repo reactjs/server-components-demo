@@ -1,0 +1,20 @@
+{
+    "extends": [
+        "fbjs"
+    ],
+    "plugins": [
+        "prettier",
+        "react"
+    ],
+    "parser": "babel-eslint",
+    "rules": {
+        "prettier/prettier": "error",
+        "no-console": 0,
+        "max-len": 0,
+        "react/react-in-jsx-scope": 0
+    },
+    "env": {
+        "node": true,
+        "browser": true
+    }
+}
