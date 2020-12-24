@@ -223,8 +223,7 @@ hr {
   border-radius: 100px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding-block: 6px 8px;
-  padding-inline: 20px;
+  padding: 6px 20px 8px;
   cursor: pointer;
   font-weight: 700;
   outline-style: none;
@@ -283,14 +282,12 @@ ul.notes-list {
 .sidebar-header {
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  padding-block: 36px 16px;
-  padding-inline: 16px;
+  padding: 36px 16px 16px;
   display: flex;
   align-items: center;
 }
 .sidebar-menu {
-  padding-inline: 16px;
-  padding-block: 0 16px;
+  padding: 0 16px 16px;
   display: flex;
   justify-content: space-between;
 }
@@ -519,8 +516,7 @@ ul.notes-list {
   border-radius: 100px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding-block: 6px 8px;
-  padding-inline: 20px;
+  padding: 6px 20px 8px;
   cursor: pointer;
   font-weight: 700;
   margin-inline-start: 12px;
@@ -630,8 +626,7 @@ ul.notes-list {
 }
 .skeleton--button {
   border-radius: 100px;
-  padding-block: 6px 8px;
-  padding-inline: 20px;
+  padding: 6px 20px 8px;
   width: auto;
 }
 .v-stack + .v-stack {
