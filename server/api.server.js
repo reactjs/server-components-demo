@@ -21,7 +21,7 @@ babelRegister({
 const express = require('express');
 const compress = require('compression');
 const {readFileSync} = require('fs');
-const {unlink, writeFile} = require('fs/promises');
+const {unlink, writeFile} = require('fs').promises;
 const {pipeToNodeWritable} = require('react-server-dom-webpack/writer');
 const path = require('path');
 const {Pool} = require('pg');
