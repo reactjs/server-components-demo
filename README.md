@@ -37,15 +37,17 @@ Then open http://localhost:4000.
 The app won't work until you set up the database, as described below.
 
 <details>
-  <summary>Setup with Docker</summary>
+  <summary>Setup with Docker (optional)</summary>
   <p>You can also start dev build of the app by using docker-compose.</p>
-  <p>Make sure you have docker and docker-compose installed then run:</p>
+  <p>⚠️ This is <b>completely optional,</b> and is only for people who <i>prefer</i> Docker to global installs!</p>
+  <p>If you prefer Docker, make sure you have docker and docker-compose installed then run:</p>
   <pre><code>docker-compose up</code></pre>
   <h4>Running seed script</h4>
   <p>1. Run containers in the detached mode</p>
   <pre><code>docker-compose up -d</code></pre>
   <p>2. Run seed script</p>
   <pre><code>docker-compose exec notes-app npm run seed</code></pre>
+  <p>If you'd rather not use Docker, skip this section and continue below.</p>
 </details>
 
 ## DB Setup
