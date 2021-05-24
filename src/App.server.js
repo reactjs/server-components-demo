@@ -6,28 +6,37 @@
  *
  */
 
-import {Suspense} from 'react';
+// import {Suspense} from 'react'
 
-import Note from './Note.server';
-import NoteList from './NoteList.server';
-import EditButton from './EditButton.client';
-import SearchField from './SearchField.client';
-import NoteSkeleton from './NoteSkeleton';
-import NoteListSkeleton from './NoteListSkeleton';
+// import Note from './Note.server'
+// import NoteList from './NoteList.server'
+// import EditButton from './EditButton.client'
+// import SearchField from './SearchField.client'
+// import NoteSkeleton from './NoteSkeleton'
+// import NoteListSkeleton from './NoteListSkeleton'
+import {Suspense} from 'react'
+import NoteListSkeleton from './NoteListSkeleton'
+import HomeScreen from './HomeScreen.client'
+import {AppNavbar} from './Navbar.client'
 
 export default function App({selectedId, isEditing, searchText}) {
   return (
-    <div className="main">
+    <>
+      <AppNavbar />
+
+      <Suspense fallback={<NoteListSkeleton isEditing={isEditing} />}>
+        <HomeScreen />
+      </Suspense>
+    </>
+  )
+}
+
+/**
+ * 
+ * <div className="main">
       <section className="col sidebar">
         <section className="sidebar-header">
-          <img
-            className="logo"
-            src="logo.svg"
-            width="22px"
-            height="20px"
-            alt=""
-            role="presentation"
-          />
+          <img className="logo" src="logo.svg" width="22px" height="20px" alt="" role="presentation" />
           <strong>React Notes</strong>
         </section>
         <section className="sidebar-menu" role="menubar">
@@ -46,5 +55,4 @@ export default function App({selectedId, isEditing, searchText}) {
         </Suspense>
       </section>
     </div>
-  );
-}
+ */

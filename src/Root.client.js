@@ -6,11 +6,11 @@
  *
  */
 
-import {useState, Suspense} from 'react';
-import {ErrorBoundary} from 'react-error-boundary';
+import {useState, Suspense} from 'react'
+import {ErrorBoundary} from 'react-error-boundary'
 
-import {useServerResponse} from './Cache.client';
-import {LocationContext} from './LocationContext.client';
+import {useServerResponse} from './Cache.client'
+import {LocationContext} from './LocationContext.client'
 
 export default function Root({initialCache}) {
   return (
@@ -19,7 +19,7 @@ export default function Root({initialCache}) {
         <Content />
       </ErrorBoundary>
     </Suspense>
-  );
+  )
 }
 
 function Content() {
@@ -27,13 +27,9 @@ function Content() {
     selectedId: null,
     isEditing: false,
     searchText: '',
-  });
-  const response = useServerResponse(location);
-  return (
-    <LocationContext.Provider value={[location, setLocation]}>
-      {response.readRoot()}
-    </LocationContext.Provider>
-  );
+  })
+  const response = useServerResponse(location)
+  return <LocationContext.Provider value={[location, setLocation]}>{response.readRoot()}</LocationContext.Provider>
 }
 
 function Error({error}) {
@@ -42,5 +38,5 @@ function Error({error}) {
       <h1>Application Error</h1>
       <pre style={{whiteSpace: 'pre-wrap'}}>{error.stack}</pre>
     </div>
-  );
+  )
 }

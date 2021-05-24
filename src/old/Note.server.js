@@ -6,39 +6,32 @@
  *
  */
 
-import {fetch} from 'react-fetch';
-import {readFile} from 'react-fs';
-import {format} from 'date-fns';
-import path from 'path';
+import {fetch} from 'react-fetch'
+import {readFile} from 'react-fs'
+import {format} from 'date-fns'
+import path from 'path'
 
-import NotePreview from './NotePreview';
-import EditButton from './EditButton.client';
-import NoteEditor from './NoteEditor.client';
+import NotePreview from './NotePreview'
+import EditButton from './EditButton.client'
+import NoteEditor from './NoteEditor.client'
 
 export default function Note({selectedId, isEditing}) {
-  const note =
-    selectedId != null
-      ? fetch(`http://localhost:4000/notes/${selectedId}`).json()
-      : null;
+  const note = selectedId != null ? fetch(`http://localhost:4000/notes/${selectedId}`).json() : null
 
   if (note === null) {
     if (isEditing) {
-      return (
-        <NoteEditor noteId={null} initialTitle="Untitled" initialBody="" />
-      );
+      return <NoteEditor noteId={null} initialTitle="Untitled" initialBody="" />
     } else {
       return (
         <div className="note--empty-state">
-          <span className="note-text--empty-state">
-            Click a note on the left to view something! 🥺
-          </span>
+          <span className="note-text--empty-state">Click a note on the left to view something! 🥺</span>
         </div>
-      );
+      )
     }
   }
 
-  let {id, title, body, updated_at} = note;
-  const updatedAt = new Date(updated_at);
+  let {id, title, body, updated_at} = note
+  const updatedAt = new Date(updated_at)
 
   // We could also read from a file instead.
   // body = readFile(path.resolve(`./notes/${note.id}.md`), 'utf8');
@@ -47,7 +40,7 @@ export default function Note({selectedId, isEditing}) {
   // fetch('http://localhost:4000/sleep/3000');
 
   if (isEditing) {
-    return <NoteEditor noteId={id} initialTitle={title} initialBody={body} />;
+    return <NoteEditor noteId={id} initialTitle={title} initialBody={body} />
   } else {
     return (
       <div className="note">
@@ -62,6 +55,6 @@ export default function Note({selectedId, isEditing}) {
         </div>
         <NotePreview body={body} />
       </div>
-    );
+    )
   }
 }

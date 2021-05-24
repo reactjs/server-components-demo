@@ -1,18 +1,8 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-'use strict';
-
 module.exports = {
-  arrowParens: 'always',
-  bracketSpacing: false,
-  singleQuote: true,
-  jsxBracketSameLine: true,
+  semi: false,
   trailingComma: 'es5',
-  printWidth: 80,
-};
+  singleQuote: true,
+  printWidth: 120,
+  tabWidth: 2,
+  bracketSpacing: false,
+}
