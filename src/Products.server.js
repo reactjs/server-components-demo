@@ -1,4 +1,4 @@
-import {ProductCard} from './ProductCard.client'
+import ProductCard from './ProductCard.client'
 import {fetch} from 'react-fetch'
 
 export default function Products({searchText}) {

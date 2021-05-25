@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useState} from 'react'
 import {useLocation} from './LocationContext.client'
 
-export const GlobalSearch = () => {
+export default function GlobalSearch() {
   const {onChange, text} = useGlobalSearch()
 
   return (

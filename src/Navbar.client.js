@@ -1,6 +1,6 @@
-import {GlobalSearch} from './GlobalSearch.client'
+import GlobalSearch from './GlobalSearch.client'
 
-export const AppNavbar = () => {
+export default function AppNavbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">

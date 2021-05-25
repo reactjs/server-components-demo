@@ -1,6 +1,6 @@
 import {ProductCardStyles as UI} from './ProductCardStyles.server'
 
-export const ProductCard = ({product}) => {
+export default function ProductCard({product}) {
   const {name, image, description} = product
   return (
     <UI.Card className="col-md-4 col-sm-6 col-lg-2">

@@ -14,20 +14,26 @@
 // import SearchField from './SearchField.client'
 // import NoteSkeleton from './NoteSkeleton'
 // import NoteListSkeleton from './NoteListSkeleton'
+// import {Suspense} from 'react'
+// import NoteListSkeleton from './NoteListSkeleton'
 import {Suspense} from 'react'
+// import HomeScreen from './HomeScreen.client'
+import AppNavbar from './Navbar.client'
 import NoteListSkeleton from './NoteListSkeleton'
-import HomeScreen from './HomeScreen.client'
-import {AppNavbar} from './Navbar.client'
+import Products from './Products.server'
 
 export default function App({selectedId, isEditing, searchText}) {
   return (
-    <>
+    <div className="container-fluid">
       <AppNavbar />
-
-      <Suspense fallback={<NoteListSkeleton isEditing={isEditing} />}>
-        <HomeScreen />
-      </Suspense>
-    </>
+      <div className="container-fluid">
+        <div className="row justify-content-md-center">
+          <Suspense fallback={<NoteListSkeleton />}>
+            <Products searchText={searchText} />
+          </Suspense>
+        </div>
+      </div>
+    </div>
   )
 }
 
