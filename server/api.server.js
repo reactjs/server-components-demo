@@ -31,15 +31,35 @@ const ReactApp = require('../src/App.server').default;
 // Don't keep credentials in the source tree in a real app!
 const pool = new Pool(require('../credentials'));
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 const app = express();
 
 app.use(compress());
 app.use(express.json());
 
-app.listen(PORT, () => {
-  console.log('React Notes listening at 4000...');
-});
+app
+  .listen(PORT, () => {
+    console.log(`React Notes listening at ${PORT}...`);
+  })
+  .on('error', function(error) {
+    if (error.syscall !== 'listen') {
+      throw error;
+    }
+    const isPipe = (portOrPipe) => Number.isNaN(portOrPipe);
+    const bind = isPipe(PORT) ? 'Pipe ' + PORT : 'Port ' + PORT;
+    switch (error.code) {
+      case 'EACCES':
+        console.error(bind + ' requires elevated privileges');
+        process.exit(1);
+        break;
+      case 'EADDRINUSE':
+        console.error(bind + ' is already in use');
+        process.exit(1);
+        break;
+      default:
+        throw error;
+    }
+  });
 
 function handleErrors(fn) {
   return async function(req, res, next) {
@@ -166,25 +186,6 @@ app.get('/sleep/:ms', function(req, res) {
 
 app.use(express.static('build'));
 app.use(express.static('public'));
-
-app.on('error', function(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
-  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
-});
 
 async function waitForWebpack() {
   while (true) {
