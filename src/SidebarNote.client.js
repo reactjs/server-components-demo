@@ -6,13 +6,13 @@
  *
  */
 
-import {useState, useRef, useEffect, unstable_useTransition} from 'react';
+import {useState, useRef, useEffect, useTransition} from 'react';
 
 import {useLocation} from './LocationContext.client';
 
 export default function SidebarNote({id, title, children, expandedChildren}) {
   const [location, setLocation] = useLocation();
-  const [startTransition, isPending] = unstable_useTransition();
+  const [isPending, startTransition] = useTransition();
   const [isExpanded, setIsExpanded] = useState(false);
   const isActive = id === location.selectedId;
 

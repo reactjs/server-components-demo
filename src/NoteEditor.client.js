@@ -6,7 +6,7 @@
  *
  */
 
-import {useState, unstable_useTransition} from 'react';
+import {useState, useTransition} from 'react';
 import {createFromReadableStream} from 'react-server-dom-webpack';
 
 import NotePreview from './NotePreview';
@@ -18,7 +18,7 @@ export default function NoteEditor({noteId, initialTitle, initialBody}) {
   const [title, setTitle] = useState(initialTitle);
   const [body, setBody] = useState(initialBody);
   const [location, setLocation] = useLocation();
-  const [startNavigating, isNavigating] = unstable_useTransition();
+  const [isNavigating, startNavigating] = useTransition();
   const [isSaving, saveNote] = useMutation({
     endpoint: noteId !== null ? `/notes/${noteId}` : `/notes`,
     method: noteId !== null ? 'PUT' : 'POST',

@@ -6,13 +6,13 @@
  *
  */
 
-import {unstable_useTransition} from 'react';
+import {useTransition} from 'react';
 
 import {useLocation} from './LocationContext.client';
 
 export default function EditButton({noteId, children}) {
   const [, setLocation] = useLocation();
-  const [startTransition, isPending] = unstable_useTransition();
+  const [isPending, startTransition] = useTransition();
   const isDraft = noteId == null;
   return (
     <button

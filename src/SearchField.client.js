@@ -6,14 +6,14 @@
  *
  */
 
-import {useState, unstable_useTransition} from 'react';
+import {useState, useTransition} from 'react';
 
 import {useLocation} from './LocationContext.client';
 import Spinner from './Spinner';
 
 export default function SearchField() {
   const [text, setText] = useState('');
-  const [startSearching, isSearching] = unstable_useTransition(false);
+  const [isSearching, startSearching] = useTransition();
   const [, setLocation] = useLocation();
   return (
     <form className="search" role="search" onSubmit={(e) => e.preventDefault()}>
