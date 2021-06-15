@@ -6,9 +6,11 @@
  *
  */
 
-import {createRoot} from 'react-dom';
+import {hydrateRoot} from 'react-dom';
 import Root from './Root.client';
 
 const initialCache = new Map();
-const root = createRoot(document.getElementById('root'));
-root.render(<Root initialCache={initialCache} />);
+hydrateRoot(
+  document.getElementById('root'),
+  <Root initialCache={initialCache} />
+);
