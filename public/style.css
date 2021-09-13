@@ -358,7 +358,6 @@ ul.notes-list {
   border-radius: 50%;
   height: 24px;
   border: 1px solid var(--gray-60);
-  cursor: pointer;
   flex-shrink: 0;
   visibility: hidden;
   opacity: 0;
