@@ -19,6 +19,9 @@ import NullDependency from 'webpack/lib/dependencies/NullDependency';
 import AsyncDependenciesBlock from 'webpack/lib/AsyncDependenciesBlock';
 import Template from 'webpack/lib/Template';
 
+import type {Compiler, Compilation} from 'webpack5';
+import {sources} from 'webpack5';
+
 const isArrayImpl = Array.isArray; // eslint-disable-next-line no-redeclare
 
 function isArray(a) {
@@ -95,12 +98,12 @@ export default class ReactFlightWebpackPlugin {
       options.manifestFilename || 'react-client-manifest.json';
   }
 
-  apply(compiler) {
+  apply(compiler: Compiler) {
     const _this = this;
 
     var resolvedClientReferences;
 
-    var run = function(params, callback) {
+    function run (params, callback) {
       // First we need to find all client files on the file system. We do this early so
       // that we have them synchronously available later when we need them. This might
       // not be needed anymore since we no longer need to compile the module itself in
@@ -130,11 +133,11 @@ export default class ReactFlightWebpackPlugin {
     compiler.hooks.compilation.tap(PLUGIN_NAME, function(compilation, _ref) {
       var normalModuleFactory = _ref.normalModuleFactory;
       compilation.dependencyFactories.set(
-        ClientReferenceDependency,
+        ClientReferenceDependency as any,
         normalModuleFactory
       );
       compilation.dependencyTemplates.set(
-        ClientReferenceDependency,
+        ClientReferenceDependency as any,
         new NullDependency.Template()
       );
       compilation.hooks.buildModule.tap(PLUGIN_NAME, function(module) {
@@ -144,9 +147,11 @@ export default class ReactFlightWebpackPlugin {
         // client runtime. So we add them as a dependency of the Flight client runtime.
         // Anything that imports the runtime will be made aware of these chunks.
         // TODO: Warn if we don't find this file anywhere in the compilation.
-        if (module.resource !== clientFileName) {
-          return;
-        }
+
+        // TODO bring this back
+        // if (module.resource !== clientFileName) {
+        //   return;
+        // }
 
         if (resolvedClientReferences) {
           for (var i = 0; i < resolvedClientReferences.length; i++) {
@@ -170,7 +175,7 @@ export default class ReactFlightWebpackPlugin {
         }
       });
     });
-    compiler.hooks.emit.tap(PLUGIN_NAME, function(compilation) {
+    compiler.hooks.emit.tap(PLUGIN_NAME, function(compilation: Compilation) {
       var json = {};
       compilation.chunkGroups.forEach(function(chunkGroup) {
         var chunkIds = chunkGroup.chunks.map(function(c) {
@@ -203,26 +208,20 @@ export default class ReactFlightWebpackPlugin {
         }
 
         chunkGroup.chunks.forEach(function(chunk) {
-          chunk.getModules().forEach(function(mod) {
-            recordModule(mod.id, mod); // If this is a concatenation, register each child to the parent ID.
-
-            if (mod.modules) {
-              mod.modules.forEach(function(concatenatedMod) {
-                recordModule(mod.id, concatenatedMod);
-              });
+          const chunkModules = compilation.chunkGraph.getChunkModulesIterable(chunk)
+          for (const mod of chunkModules) {
+            recordModule(chunk, mod)
+            // If this is a concatenation, register each child to the parent ID.
+            if ((mod as any).modules) {
+              (mod as any).modules.forEach((concatenatedMod) => {
+                recordModule(chunk, concatenatedMod)
+              })
             }
-          });
+          }
         });
       });
-      var output = JSON.stringify(json, null, 2);
-      compilation.assets[_this.manifestFilename] = {
-        source: function() {
-          return output;
-        },
-        size: function() {
-          return output.length;
-        },
-      };
+      const output = JSON.stringify(json, null, 2);
+      compilation.assets[_this.manifestFilename] = new sources.RawSource(output)
     });
   } // This attempts to replicate the dynamic file path resolution used for other wildcard
   // resolution in Webpack is using.
