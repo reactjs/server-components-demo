@@ -30,3 +30,7 @@ yarn-error.log*
 
 # vscode
 .vscode
+
+# generated js
+scripts/build-webpack5.js
+plugins/react-server-dom-webpack-plugin.js

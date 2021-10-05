@@ -10,13 +10,13 @@
 
 const path = require('path');
 const rimraf = require('rimraf');
-const webpack = require('webpack');
+const webpack4 = require('webpack4');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ReactServerWebpackPlugin = require('react-server-dom-webpack/plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 rimraf.sync(path.resolve(__dirname, '../build'));
-webpack(
+webpack4(
   {
     mode: isProduction ? 'production' : 'development',
     devtool: isProduction ? 'source-map' : 'cheap-module-source-map',
