@@ -10,13 +10,13 @@
 
 const path = require('path');
 const rimraf = require('rimraf');
-const webpack5 = require('webpack5');
-const HtmlWebpackPlugin = require('html-webpack-plugin-5');
-import ReactServerWebpackPlugin from './../plugins/react-server-dom-webpack-plugin';
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+import ReactServerWebpackPlugin from '../plugins/react-server-dom-webpack-plugin';
 
 const isProduction = process.env.NODE_ENV === 'production';
 rimraf.sync(path.resolve(__dirname, '../build'));
-webpack5(
+webpack(
   {
     mode: isProduction ? 'production' : 'development',
     devtool: isProduction ? 'source-map' : 'cheap-module-source-map',
