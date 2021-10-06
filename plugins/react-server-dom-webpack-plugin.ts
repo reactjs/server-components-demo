@@ -19,7 +19,7 @@ import NullDependency from 'webpack/lib/dependencies/NullDependency';
 import AsyncDependenciesBlock from 'webpack/lib/AsyncDependenciesBlock';
 import Template from 'webpack/lib/Template';
 
-import type {Compiler} from 'webpack';
+import type {Compiler, Chunk, Module} from 'webpack';
 import {sources, Compilation} from 'webpack';
 
 const isArrayImpl = Array.isArray; // eslint-disable-next-line no-redeclare
@@ -191,7 +191,7 @@ export default class ReactFlightWebpackPlugin {
               return c.id;
             });
 
-            function recordModule(chunk, mod) {
+            function recordModule(chunk: Chunk, mod) {
               // TODO: Hook into deps instead of the target module.
               // That way we know by the type of dep whether to include.
               // It also resolves conflicts when the same module is in multiple chunks.
@@ -199,9 +199,13 @@ export default class ReactFlightWebpackPlugin {
                 return;
               }
 
+              const moduleProvidedExports = compilation.moduleGraph
+                .getExportsInfo(mod)
+                .getProvidedExports();
+
               var moduleExports = {};
               ['', '*']
-                .concat(mod.buildMeta.providedExports)
+                .concat(Array.isArray(moduleProvidedExports) ? moduleProvidedExports : [])
                 .forEach(function(name) {
                   moduleExports[name] = {
                     id: chunk.id,
@@ -238,7 +242,7 @@ export default class ReactFlightWebpackPlugin {
         }
       );
     });
-    
+
   } // This attempts to replicate the dynamic file path resolution used for other wildcard
   // resolution in Webpack is using.
 
