@@ -19,8 +19,8 @@ import NullDependency from 'webpack/lib/dependencies/NullDependency';
 import AsyncDependenciesBlock from 'webpack/lib/AsyncDependenciesBlock';
 import Template from 'webpack/lib/Template';
 
-import type {Compiler, Compilation} from 'webpack';
-import {sources} from 'webpack';
+import type {Compiler} from 'webpack';
+import {sources, Compilation} from 'webpack';
 
 const isArrayImpl = Array.isArray; // eslint-disable-next-line no-redeclare
 
@@ -129,8 +129,10 @@ export default class ReactFlightWebpackPlugin {
     };
 
     compiler.hooks.run.tapAsync(PLUGIN_NAME, run);
+
     compiler.hooks.watchRun.tapAsync(PLUGIN_NAME, run);
-    compiler.hooks.compilation.tap(PLUGIN_NAME, function(compilation, _ref) {
+
+    compiler.hooks.compilation.tap(PLUGIN_NAME, function(compilation: Compilation, _ref) {
       var normalModuleFactory = _ref.normalModuleFactory;
       compilation.dependencyFactories.set(
         ClientReferenceDependency as any,
@@ -175,54 +177,68 @@ export default class ReactFlightWebpackPlugin {
         }
       });
     });
-    compiler.hooks.emit.tap(PLUGIN_NAME, function(compilation: Compilation) {
-      var json = {};
-      compilation.chunkGroups.forEach(function(chunkGroup) {
-        var chunkIds = chunkGroup.chunks.map(function(c) {
-          return c.id;
-        });
 
-        function recordModule(id, mod) {
-          // TODO: Hook into deps instead of the target module.
-          // That way we know by the type of dep whether to include.
-          // It also resolves conflicts when the same module is in multiple chunks.
-          if (!/\.client\.js$/.test(mod.resource)) {
-            return;
-          }
-
-          var moduleExports = {};
-          ['', '*']
-            .concat(mod.buildMeta.providedExports)
-            .forEach(function(name) {
-              moduleExports[name] = {
-                id: id,
-                chunks: chunkIds,
-                name: name,
-              };
+    compiler.hooks.make.tap(PLUGIN_NAME, function(compilation: Compilation) {
+      compilation.hooks.processAssets.tap(
+        {
+          name: PLUGIN_NAME,
+          stage: Compilation.PROCESS_ASSETS_STAGE_REPORT,
+        },
+        function() {
+          var json = {};
+          compilation.chunkGroups.forEach(function(chunkGroup) {
+            var chunkIds = chunkGroup.chunks.map(function(c) {
+              return c.id;
             });
-          var href = url.pathToFileURL(mod.resource).href;
 
-          if (href !== undefined) {
-            json[href] = JSON.stringify(moduleExports, null, 2);
-          }
-        }
+            function recordModule(chunk, mod) {
+              // TODO: Hook into deps instead of the target module.
+              // That way we know by the type of dep whether to include.
+              // It also resolves conflicts when the same module is in multiple chunks.
+              if (!/\.client\.js$/.test(mod.resource)) {
+                return;
+              }
 
-        chunkGroup.chunks.forEach(function(chunk) {
-          const chunkModules = compilation.chunkGraph.getChunkModulesIterable(chunk)
-          for (const mod of chunkModules) {
-            recordModule(chunk, mod)
-            // If this is a concatenation, register each child to the parent ID.
-            if ((mod as any).modules) {
-              (mod as any).modules.forEach((concatenatedMod) => {
-                recordModule(chunk, concatenatedMod)
-              })
+              var moduleExports = {};
+              ['', '*']
+                .concat(mod.buildMeta.providedExports)
+                .forEach(function(name) {
+                  moduleExports[name] = {
+                    id: chunk.id,
+                    chunks: chunk.ids,
+                    name: name,
+                  };
+                });
+              var href = url.pathToFileURL(mod.resource).href;
+
+              if (href !== undefined) {
+                json[href] = moduleExports;
+              }
             }
-          }
-        });
-      });
-      const output = JSON.stringify(json, null, 2);
-      compilation.assets[_this.manifestFilename] = new sources.RawSource(output)
+
+            chunkGroup.chunks.forEach(function(chunk) {
+              const chunkModules = compilation.chunkGraph.getChunkModulesIterable(chunk)
+              for (const module of chunkModules) {
+                recordModule(chunk, module)
+                // If this is a concatenation, register each child to the parent ID.
+                if ((module as any).modules) {
+                  (module as any).modules.forEach((concatenatedMod) => {
+                    recordModule(chunk, concatenatedMod)
+                  })
+                }
+              }
+            });
+          });
+          console.log('~~~ JSON ~~~~', json);
+          const output = JSON.stringify(json, null, 2);
+          compilation.emitAsset(
+            _this.manifestFilename,
+            new sources.RawSource(output, false),
+          );
+        }
+      );
     });
+    
   } // This attempts to replicate the dynamic file path resolution used for other wildcard
   // resolution in Webpack is using.
 
