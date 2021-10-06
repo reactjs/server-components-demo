@@ -11,7 +11,7 @@
 const path = require('path');
 const rimraf = require('rimraf');
 const webpack4 = require('webpack4');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin-4');
 const ReactServerWebpackPlugin = require('react-server-dom-webpack/plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';

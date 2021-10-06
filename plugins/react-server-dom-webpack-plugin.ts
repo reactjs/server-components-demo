@@ -14,10 +14,10 @@
 import path from 'path';
 import url from 'url';
 import asyncLib from 'neo-async';
-import ModuleDependency from 'webpack/lib/dependencies/ModuleDependency';
-import NullDependency from 'webpack/lib/dependencies/NullDependency';
-import AsyncDependenciesBlock from 'webpack/lib/AsyncDependenciesBlock';
-import Template from 'webpack/lib/Template';
+import ModuleDependency from 'webpack5/lib/dependencies/ModuleDependency';
+import NullDependency from 'webpack5/lib/dependencies/NullDependency';
+import AsyncDependenciesBlock from 'webpack5/lib/AsyncDependenciesBlock';
+import Template from 'webpack5/lib/Template';
 
 import type {Compiler, Compilation} from 'webpack5';
 import {sources} from 'webpack5';
