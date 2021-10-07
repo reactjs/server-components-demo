@@ -22,6 +22,10 @@ import Template from 'webpack/lib/Template';
 import type {Compiler, Chunk, Module} from 'webpack';
 import {sources, Compilation} from 'webpack';
 
+interface ModuleWithResource extends Module {
+  resource: string;
+}
+
 const isArrayImpl = Array.isArray; // eslint-disable-next-line no-redeclare
 
 function isArray(a) {
@@ -191,11 +195,11 @@ export default class ReactFlightWebpackPlugin {
               return c.id;
             });
 
-            function recordModule(chunk: Chunk, mod) {
+            function recordModule(chunk: Chunk, mod: Module) {
               // TODO: Hook into deps instead of the target module.
               // That way we know by the type of dep whether to include.
               // It also resolves conflicts when the same module is in multiple chunks.
-              if (!/\.client\.(js|ts)x?$/.test(mod.resource)) {
+              if (!/\.client\.(js|ts)x?$/.test((mod as ModuleWithResource).resource)) {
                 return
               }
 
@@ -213,7 +217,7 @@ export default class ReactFlightWebpackPlugin {
                     name: name,
                   };
                 });
-              var href = url.pathToFileURL(mod.resource).href;
+              var href = url.pathToFileURL((mod as ModuleWithResource).resource).href;
 
               if (href !== undefined) {
                 json[href] = moduleExports;
