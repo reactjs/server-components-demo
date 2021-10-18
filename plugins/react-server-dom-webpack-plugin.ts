@@ -20,7 +20,7 @@ import AsyncDependenciesBlock from 'webpack/lib/AsyncDependenciesBlock';
 import Template from 'webpack/lib/Template';
 
 import type {Compiler, Chunk, Module} from 'webpack';
-import {sources, Compilation} from 'webpack';
+import {sources, WebpackError, Compilation} from 'webpack';
 
 interface ModuleWithResource extends Module {
   resource: string;
@@ -48,10 +48,8 @@ class ClientReferenceDependency extends ModuleDependency {
 // without the client runtime so it's the first time in the loading sequence
 // you might want them.
 
-const clientFileName =
-  process.env.NODE_ENV === 'production'
-    ? require('./cjs/react-server-dom-webpack.production.min.js')
-    : require('./cjs/react-server-dom-webpack.development.js');
+const clientImportName = 'react-server-dom-webpack';
+const clientFileName = require.resolve(clientImportName);
 
 const PLUGIN_NAME = 'React Server Plugin';
 
@@ -105,7 +103,9 @@ export default class ReactFlightWebpackPlugin {
   apply(compiler: Compiler) {
     const _this = this;
 
-    var resolvedClientReferences;
+    let resolvedClientReferences;
+
+    let clientFileNameFound = false;
 
     function run (params, callback) {
       // First we need to find all client files on the file system. We do this early so
@@ -113,7 +113,7 @@ export default class ReactFlightWebpackPlugin {
       // not be needed anymore since we no longer need to compile the module itself in
       // a special way. So it's probably better to do this lazily and in parallel with
       // other compilation.
-      var contextResolver = compiler.resolverFactory.get('context', {});
+      const contextResolver = compiler.resolverFactory.get('context', {});
 
       _this.resolveAllClientFiles(
         compiler.context,
@@ -136,38 +136,40 @@ export default class ReactFlightWebpackPlugin {
 
     compiler.hooks.watchRun.tapAsync(PLUGIN_NAME, run);
 
-    compiler.hooks.compilation.tap(PLUGIN_NAME, function(compilation: Compilation, _ref) {
-      var normalModuleFactory = _ref.normalModuleFactory;
+    compiler.hooks.compilation.tap(PLUGIN_NAME, function(compilation: Compilation, {normalModuleFactory}) {
+
       compilation.dependencyFactories.set(
         ClientReferenceDependency as any,
         normalModuleFactory
       );
+
       compilation.dependencyTemplates.set(
         ClientReferenceDependency as any,
         new NullDependency.Template()
       );
+
       compilation.hooks.buildModule.tap(PLUGIN_NAME, function(module) {
         // We need to add all client references as dependency of something in the graph so
         // Webpack knows which entries need to know about the relevant chunks and include the
         // map in their runtime. The things that actually resolves the dependency is the Flight
         // client runtime. So we add them as a dependency of the Flight client runtime.
         // Anything that imports the runtime will be made aware of these chunks.
-        // TODO: Warn if we don't find this file anywhere in the compilation.
 
-        // TODO bring this back
-        // if (module.resource !== clientFileName) {
-        //   return;
-        // }
+        if ((module as ModuleWithResource).resource !== clientFileName) {
+          return;
+        }
+
+        clientFileNameFound = true;
 
         if (resolvedClientReferences) {
           for (var i = 0; i < resolvedClientReferences.length; i++) {
-            var dep = resolvedClientReferences[i];
+            const dep = resolvedClientReferences[i];
 
-            var chunkName = _this.chunkName
+            const chunkName = _this.chunkName
               .replace(/\[index\]/g, '' + i)
               .replace(/\[request\]/g, Template.toPath(dep.userRequest));
 
-            var block = new AsyncDependenciesBlock(
+            const block = new AsyncDependenciesBlock(
               {
                 name: chunkName,
               },
@@ -189,22 +191,31 @@ export default class ReactFlightWebpackPlugin {
           stage: Compilation.PROCESS_ASSETS_STAGE_REPORT,
         },
         function() {
+          if (clientFileNameFound === false) {
+            compilation.warnings.push(
+              new WebpackError(
+                `Client runtime at ${clientImportName} was not found. React Server Components module map file ${_this.manifestFilename} was not created.`
+              )
+            );
+            return;
+          }
+
           var json = {};
           compilation.chunkGroups.forEach(function(chunkGroup) {
             var chunkIds = chunkGroup.chunks.map(function(c) {
               return c.id;
             });
 
-            function recordModule(chunk: Chunk, mod: Module) {
+            function recordModule(chunk: Chunk, module: Module) {
               // TODO: Hook into deps instead of the target module.
               // That way we know by the type of dep whether to include.
               // It also resolves conflicts when the same module is in multiple chunks.
-              if (!/\.client\.(js|ts)x?$/.test((mod as ModuleWithResource).resource)) {
+              if (!/\.client\.(js|ts)x?$/.test((module as ModuleWithResource).resource)) {
                 return
               }
 
               const moduleProvidedExports = compilation.moduleGraph
-                .getExportsInfo(mod)
+                .getExportsInfo(module)
                 .getProvidedExports();
 
               var moduleExports = {};
@@ -217,7 +228,7 @@ export default class ReactFlightWebpackPlugin {
                     name: name,
                   };
                 });
-              var href = url.pathToFileURL((mod as ModuleWithResource).resource).href;
+              var href = url.pathToFileURL((module as ModuleWithResource).resource).href;
 
               if (href !== undefined) {
                 json[href] = moduleExports;
@@ -237,7 +248,7 @@ export default class ReactFlightWebpackPlugin {
               }
             });
           });
-          console.log('~~~ JSON ~~~~', json);
+
           const output = JSON.stringify(json, null, 2);
           compilation.emitAsset(
             _this.manifestFilename,
@@ -247,9 +258,10 @@ export default class ReactFlightWebpackPlugin {
       );
     });
 
-  } // This attempts to replicate the dynamic file path resolution used for other wildcard
+  } 
+  
+  // This attempts to replicate the dynamic file path resolution used for other wildcard
   // resolution in Webpack is using.
-
   resolveAllClientFiles(
     context,
     contextResolver,
