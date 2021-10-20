@@ -16,11 +16,10 @@ import url from 'url';
 import asyncLib from 'neo-async';
 import ModuleDependency from 'webpack/lib/dependencies/ModuleDependency';
 import NullDependency from 'webpack/lib/dependencies/NullDependency';
-import AsyncDependenciesBlock from 'webpack/lib/AsyncDependenciesBlock';
 import Template from 'webpack/lib/Template';
 
 import type {Compiler, Chunk, Module} from 'webpack';
-import {sources, WebpackError, Compilation} from 'webpack';
+import {sources, WebpackError, Compilation, AsyncDependenciesBlock} from 'webpack';
 
 interface ModuleWithResource extends Module {
   resource: string;
@@ -42,12 +41,13 @@ class ClientReferenceDependency extends ModuleDependency {
   get type() {
     return 'client-reference';
   }
-} // This is the module that will be used to anchor all client references to.
+} 
+
+// This is the module that will be used to anchor all client references to.
 // I.e. it will have all the client files as async deps from this point on.
 // We use the Flight client implementation because you can't get to these
 // without the client runtime so it's the first time in the loading sequence
 // you might want them.
-
 const clientImportName = 'react-server-dom-webpack';
 const clientFileName = require.resolve(clientImportName);
 
@@ -107,7 +107,7 @@ export default class ReactFlightWebpackPlugin {
 
     let clientFileNameFound = false;
 
-    function run (params, callback) {
+    function run (_params, callback) {
       // First we need to find all client files on the file system. We do this early so
       // that we have them synchronously available later when we need them. This might
       // not be needed anymore since we no longer need to compile the module itself in
@@ -136,8 +136,7 @@ export default class ReactFlightWebpackPlugin {
 
     compiler.hooks.watchRun.tapAsync(PLUGIN_NAME, run);
 
-    compiler.hooks.compilation.tap(PLUGIN_NAME, function(compilation: Compilation, {normalModuleFactory}) {
-
+    compiler.hooks.thisCompilation.tap(PLUGIN_NAME, function(compilation: Compilation, {normalModuleFactory}) {
       compilation.dependencyFactories.set(
         ClientReferenceDependency as any,
         normalModuleFactory
@@ -148,7 +147,7 @@ export default class ReactFlightWebpackPlugin {
         new NullDependency.Template()
       );
 
-      compilation.hooks.buildModule.tap(PLUGIN_NAME, function(module) {
+      compilation.hooks.buildModule.tap(PLUGIN_NAME, function(module: Module) {
         // We need to add all client references as dependency of something in the graph so
         // Webpack knows which entries need to know about the relevant chunks and include the
         // map in their runtime. The things that actually resolves the dependency is the Flight
@@ -165,6 +164,8 @@ export default class ReactFlightWebpackPlugin {
           for (var i = 0; i < resolvedClientReferences.length; i++) {
             const dep = resolvedClientReferences[i];
 
+            // console.log(`~~~ resolvedClientReferences ~~ ${i}`, dep.userRequest);
+
             const chunkName = _this.chunkName
               .replace(/\[index\]/g, '' + i)
               .replace(/\[request\]/g, Template.toPath(dep.userRequest));
@@ -173,10 +174,10 @@ export default class ReactFlightWebpackPlugin {
               {
                 name: chunkName,
               },
-              module,
               null,
-              dep.require
+						  dep.request.replace('undefined', '')
             );
+
             block.addDependency(dep);
             module.addBlock(block);
           }
@@ -210,7 +211,9 @@ export default class ReactFlightWebpackPlugin {
               // TODO: Hook into deps instead of the target module.
               // That way we know by the type of dep whether to include.
               // It also resolves conflicts when the same module is in multiple chunks.
-              if (!/\.client\.(js|ts)x?$/.test((module as ModuleWithResource).resource)) {
+
+              // const moduleId = compilation.chunkGraph.getModuleId(module);
+              if (!/\.client\.(js|ts)x?$/.test((module as any).resource)) {
                 return
               }
 
@@ -224,7 +227,7 @@ export default class ReactFlightWebpackPlugin {
                 .forEach(function(name) {
                   moduleExports[name] = {
                     id: chunk.id,
-                    chunks: chunk.ids,
+                    chunks: chunkIds,
                     name: name,
                   };
                 });
@@ -236,8 +239,10 @@ export default class ReactFlightWebpackPlugin {
             }
 
             chunkGroup.chunks.forEach(function(chunk) {
+              // console.log('~~ chunk ~~~', chunk.id);
               const chunkModules = compilation.chunkGraph.getChunkModulesIterable(chunk)
               for (const module of chunkModules) {
+                
                 recordModule(chunk, module)
                 // If this is a concatenation, register each child to the parent ID.
                 if ((module as any).modules) {
