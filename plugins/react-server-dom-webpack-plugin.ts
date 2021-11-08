@@ -18,7 +18,7 @@ import ModuleDependency from 'webpack/lib/dependencies/ModuleDependency';
 import NullDependency from 'webpack/lib/dependencies/NullDependency';
 import Template from 'webpack/lib/Template';
 
-import type {Compiler, Chunk, Module} from 'webpack';
+import type {Compiler, Module} from 'webpack';
 import {sources, WebpackError, Compilation, AsyncDependenciesBlock} from 'webpack';
 
 interface ModuleWithResource extends Module {
