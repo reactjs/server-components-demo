@@ -107,19 +107,14 @@ export default class ReactFlightWebpackPlugin {
 
     let clientFileNameFound = false;
 
-    function run (_params, callback) {
-      // First we need to find all client files on the file system. We do this early so
-      // that we have them synchronously available later when we need them. This might
-      // not be needed anymore since we no longer need to compile the module itself in
-      // a special way. So it's probably better to do this lazily and in parallel with
-      // other compilation.
+    compiler.hooks.beforeCompile.tapAsync(PLUGIN_NAME, ({contextModuleFactory}, callback) => {
       const contextResolver = compiler.resolverFactory.get('context', {});
 
       _this.resolveAllClientFiles(
         compiler.context,
         contextResolver,
         compiler.inputFileSystem,
-        compiler.createContextModuleFactory(),
+        contextModuleFactory,
         function(err, resolvedClientRefs) {
           if (err) {
             callback(err);
@@ -130,11 +125,8 @@ export default class ReactFlightWebpackPlugin {
           callback();
         }
       );
-    };
-
-    compiler.hooks.run.tapAsync(PLUGIN_NAME, run);
-
-    compiler.hooks.watchRun.tapAsync(PLUGIN_NAME, run);
+    });
+    
 
     compiler.hooks.thisCompilation.tap(PLUGIN_NAME, function(compilation: Compilation, {normalModuleFactory}) {
       compilation.dependencyFactories.set(
