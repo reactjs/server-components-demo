@@ -147,42 +147,56 @@ export default class ReactFlightWebpackPlugin {
         new NullDependency.Template()
       );
 
-      compilation.hooks.buildModule.tap(PLUGIN_NAME, function(module: Module) {
-        // We need to add all client references as dependency of something in the graph so
-        // Webpack knows which entries need to know about the relevant chunks and include the
-        // map in their runtime. The things that actually resolves the dependency is the Flight
-        // client runtime. So we add them as a dependency of the Flight client runtime.
-        // Anything that imports the runtime will be made aware of these chunks.
+      const handler = (parser: any) => {
+        parser.hooks.program.tap(
+          PLUGIN_NAME,
+          () => {
+            const module = parser.state.module;
 
-        if ((module as ModuleWithResource).resource !== clientFileName) {
-          return;
-        }
+            if ((module as ModuleWithResource).resource !== clientFileName) {
+              return;
+            }
 
-        clientFileNameFound = true;
+            clientFileNameFound = true;
 
-        if (resolvedClientReferences) {
-          for (var i = 0; i < resolvedClientReferences.length; i++) {
-            const dep = resolvedClientReferences[i];
+            if (resolvedClientReferences) {
+              for (var i = 0; i < resolvedClientReferences.length; i++) {
+                const dep = resolvedClientReferences[i];
 
-            // console.log(`~~~ resolvedClientReferences ~~ ${i}`, dep.userRequest);
+                // TODO, remove this undefined hack properly
+                dep.request = dep.request.replace('undefined', '')
+    
+                const chunkName = _this.chunkName
+                  .replace(/\[index\]/g, '' + i)
+                  .replace(/\[request\]/g, Template.toPath(dep.userRequest));
+    
+                const block = new AsyncDependenciesBlock(
+                  {
+                    name: chunkName,
+                  },
+                  null,
+                  dep.request
+                );
+    
+                block.addDependency(dep);
+                module.addBlock(block);
+              }
+            }
+          },
+        );
+      };
 
-            const chunkName = _this.chunkName
-              .replace(/\[index\]/g, '' + i)
-              .replace(/\[request\]/g, Template.toPath(dep.userRequest));
+      normalModuleFactory.hooks.parser
+        .for('javascript/auto')
+        .tap('HarmonyModulesPlugin', handler);
 
-            const block = new AsyncDependenciesBlock(
-              {
-                name: chunkName,
-              },
-              null,
-						  dep.request.replace('undefined', '')
-            );
+      normalModuleFactory.hooks.parser
+        .for('javascript/esm')
+        .tap('HarmonyModulesPlugin', handler);
 
-            block.addDependency(dep);
-            module.addBlock(block);
-          }
-        }
-      });
+      normalModuleFactory.hooks.parser
+        .for('javascript/dynamic')
+        .tap('HarmonyModulesPlugin', handler);
     });
 
     compiler.hooks.make.tap(PLUGIN_NAME, function(compilation: Compilation) {
