@@ -221,12 +221,11 @@ export default class ReactFlightWebpackPlugin {
               return c.id;
             });
 
-            function recordModule(chunk: Chunk, module: Module) {
+            function recordModule(id: string | number , module: Module) {
               // TODO: Hook into deps instead of the target module.
               // That way we know by the type of dep whether to include.
               // It also resolves conflicts when the same module is in multiple chunks.
 
-              // const moduleId = compilation.chunkGraph.getModuleId(module);
               if (!/\.client\.(js|ts)x?$/.test((module as any).resource)) {
                 return
               }
@@ -240,7 +239,7 @@ export default class ReactFlightWebpackPlugin {
                 .concat(Array.isArray(moduleProvidedExports) ? moduleProvidedExports : [])
                 .forEach(function(name) {
                   moduleExports[name] = {
-                    id: chunk.id,
+                    id,
                     chunks: chunkIds,
                     name: name,
                   };
@@ -253,15 +252,16 @@ export default class ReactFlightWebpackPlugin {
             }
 
             chunkGroup.chunks.forEach(function(chunk) {
-              // console.log('~~ chunk ~~~', chunk.id);
               const chunkModules = compilation.chunkGraph.getChunkModulesIterable(chunk)
               for (const module of chunkModules) {
                 
-                recordModule(chunk, module)
+                const moduleId = compilation.chunkGraph.getModuleId(module);
+
+                recordModule(moduleId, module)
                 // If this is a concatenation, register each child to the parent ID.
                 if ((module as any).modules) {
                   (module as any).modules.forEach((concatenatedMod) => {
-                    recordModule(chunk, concatenatedMod)
+                    recordModule(moduleId, concatenatedMod)
                   })
                 }
               }
