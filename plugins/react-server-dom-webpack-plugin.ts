@@ -12,7 +12,7 @@
 'use strict';
 
 import path from 'path';
-import url from 'url';
+import {pathToFileURL} from 'url';
 import asyncLib from 'neo-async';
 import ModuleDependency from 'webpack/lib/dependencies/ModuleDependency';
 import NullDependency from 'webpack/lib/dependencies/NullDependency';
@@ -126,7 +126,6 @@ export default class ReactFlightWebpackPlugin {
         }
       );
     });
-    
 
     compiler.hooks.thisCompilation.tap(PLUGIN_NAME, function(compilation: Compilation, {normalModuleFactory}) {
       compilation.dependencyFactories.set(
@@ -204,9 +203,9 @@ export default class ReactFlightWebpackPlugin {
             return;
           }
 
-          var json = {};
+          const json = {};
           compilation.chunkGroups.forEach(function(chunkGroup) {
-            var chunkIds = chunkGroup.chunks.map(function(c) {
+            const chunkIds = chunkGroup.chunks.map(function(c) {
               return c.id;
             });
 
@@ -223,7 +222,7 @@ export default class ReactFlightWebpackPlugin {
                 .getExportsInfo(module)
                 .getProvidedExports();
 
-              var moduleExports = {};
+              const moduleExports = {};
               ['', '*']
                 .concat(Array.isArray(moduleProvidedExports) ? moduleProvidedExports : [])
                 .forEach(function(name) {
@@ -233,7 +232,7 @@ export default class ReactFlightWebpackPlugin {
                     name: name,
                   };
                 });
-              var href = url.pathToFileURL((module as ModuleWithResource).resource).href;
+              const href = pathToFileURL((module as ModuleWithResource).resource).href;
 
               if (href !== undefined) {
                 json[href] = moduleExports;
@@ -242,7 +241,7 @@ export default class ReactFlightWebpackPlugin {
 
             chunkGroup.chunks.forEach(function(chunk) {
               const chunkModules = compilation.chunkGraph.getChunkModulesIterable(chunk)
-              for (const module of chunkModules) {
+              for (let module of chunkModules) {
                 
                 const moduleId = compilation.chunkGraph.getModuleId(module);
 
@@ -285,7 +284,7 @@ export default class ReactFlightWebpackPlugin {
           return;
         }
 
-        var clientReferenceSearch = clientReferencePath;
+        const clientReferenceSearch = clientReferencePath;
         contextResolver.resolve(
           {},
           context,
@@ -293,7 +292,7 @@ export default class ReactFlightWebpackPlugin {
           {},
           function(err, resolvedDirectory) {
             if (err) return cb(err);
-            var options = {
+            const options = {
               resource: resolvedDirectory,
               resourceQuery: '',
               recursive:
@@ -309,10 +308,10 @@ export default class ReactFlightWebpackPlugin {
               deps
             ) {
               if (err2) return cb(err2);
-              var clientRefDeps = deps.map(function(dep) {
-                // use userRequest instead of request. request always end with undefined
-                var request = path.join(resolvedDirectory, dep.userRequest);
-                var clientRefDep = new ClientReferenceDependency(request);
+              const clientRefDeps = deps.map(function(dep) {
+                // use userRequest instead of request. request always end with undefined which is wrong
+                const request = path.join(resolvedDirectory, dep.userRequest);
+                const clientRefDep = new ClientReferenceDependency(request);
                 clientRefDep.userRequest = dep.userRequest;
                 return clientRefDep;
               });
@@ -323,9 +322,9 @@ export default class ReactFlightWebpackPlugin {
       },
       function(err, result) {
         if (err) return callback(err);
-        var flat = [];
+        const flat = [];
 
-        for (var i = 0; i < result.length; i++) {
+        for (let i = 0; i < result.length; i++) {
           flat.push.apply(flat, result[i]);
         }
 
