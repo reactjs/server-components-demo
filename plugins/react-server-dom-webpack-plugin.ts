@@ -154,9 +154,6 @@ export default class ReactFlightWebpackPlugin {
             if (resolvedClientReferences) {
               for (var i = 0; i < resolvedClientReferences.length; i++) {
                 const dep = resolvedClientReferences[i];
-
-                // TODO, remove this undefined hack properly
-                dep.request = dep.request.replace('undefined', '')
     
                 const chunkName = _this.chunkName
                   .replace(/\[index\]/g, '' + i)
@@ -313,7 +310,8 @@ export default class ReactFlightWebpackPlugin {
             ) {
               if (err2) return cb(err2);
               var clientRefDeps = deps.map(function(dep) {
-                var request = path.join(resolvedDirectory, dep.request);
+                // use userRequest instead of request. request always end with undefined
+                var request = path.join(resolvedDirectory, dep.userRequest);
                 var clientRefDep = new ClientReferenceDependency(request);
                 clientRefDep.userRequest = dep.userRequest;
                 return clientRefDep;
