@@ -22,7 +22,7 @@ const express = require('express');
 const compress = require('compression');
 const {readFileSync} = require('fs');
 const {unlink, writeFile} = require('fs').promises;
-const {pipeToNodeWritable} = require('react-server-dom-webpack/writer');
+const {renderToPipeableStream} = require('react-server-dom-webpack/writer');
 const path = require('path');
 const {Pool} = require('pg');
 const React = require('react');
@@ -93,7 +93,11 @@ async function renderReactTree(res, props) {
     'utf8'
   );
   const moduleMap = JSON.parse(manifest);
-  pipeToNodeWritable(React.createElement(ReactApp, props), res, moduleMap);
+  const {pipe} = renderToPipeableStream(
+    React.createElement(ReactApp, props),
+    moduleMap
+  );
+  pipe(res);
 }
 
 function sendResponse(req, res, redirectToId) {
