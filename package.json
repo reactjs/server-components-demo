@@ -16,7 +16,7 @@
     "date-fns": "^2.16.1",
     "excerpts": "^0.0.3",
     "express": "^4.17.1",
-    "html-webpack-plugin": "4.5.0",
+    "html-webpack-plugin": "5.5.0",
     "marked": "^1.2.5",
     "nodemon": "^2.0.6",
     "pg": "^8.5.1",
@@ -30,8 +30,8 @@
     "resolve": "1.12.0",
     "rimraf": "^3.0.2",
     "sanitize-html": "^2.2.0",
-    "webpack": "4.44.2",
-    "webpack-cli": "^4.2.0"
+    "webpack": "5.64.4",
+    "webpack-cli": "4.9.1"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
