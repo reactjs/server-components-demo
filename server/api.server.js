@@ -174,7 +174,7 @@ app.get(
     const {rows} = await pool.query('select * from notes where id = $1', [
       req.params.id,
     ]);
-    res.json(rows[0] || "null");
+    res.json(rows[0] || null);
   })
 );
 
