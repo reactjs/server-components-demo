@@ -6,7 +6,7 @@
  *
  */
 
-'use strict';
+import App from '../src/App.server'
 
 const register = require('react-server-dom-webpack/node-register');
 register();
@@ -26,7 +26,6 @@ const {renderToPipeableStream} = require('react-server-dom-webpack/writer');
 const path = require('path');
 const {Pool} = require('pg');
 const React = require('react');
-const ReactApp = require('../src/App.server').default;
 
 // Don't keep credentials in the source tree in a real app!
 const pool = new Pool(require('../credentials'));
@@ -41,11 +40,11 @@ app
   .listen(PORT, () => {
     console.log(`React Notes listening at ${PORT}...`);
   })
-  .on('error', function(error) {
+  .on('error', function(error: any) {
     if (error.syscall !== 'listen') {
       throw error;
     }
-    const isPipe = (portOrPipe) => Number.isNaN(portOrPipe);
+    const isPipe = (portOrPipe: any) => Number.isNaN(portOrPipe);
     const bind = isPipe(PORT) ? 'Pipe ' + PORT : 'Port ' + PORT;
     switch (error.code) {
       case 'EACCES':
@@ -61,8 +60,8 @@ app
     }
   });
 
-function handleErrors(fn) {
-  return async function(req, res, next) {
+function handleErrors(fn: any) {
+  return async function(req: any, res: any, next: any) {
     try {
       return await fn(req, res);
     } catch (x) {
@@ -73,7 +72,7 @@ function handleErrors(fn) {
 
 app.get(
   '/',
-  handleErrors(async function(_req, res) {
+  handleErrors(async function(_req: any, res: any) {
     await waitForWebpack();
     const html = readFileSync(
       path.resolve(__dirname, '../build/index.html'),
@@ -86,7 +85,7 @@ app.get(
   })
 );
 
-async function renderReactTree(res, props) {
+async function renderReactTree(res: any, props: any) {
   await waitForWebpack();
   const manifest = readFileSync(
     path.resolve(__dirname, '../build/react-client-manifest.json'),
@@ -94,13 +93,13 @@ async function renderReactTree(res, props) {
   );
   const moduleMap = JSON.parse(manifest);
   const {pipe} = renderToPipeableStream(
-    React.createElement(ReactApp, props),
+    React.createElement(App, props),
     moduleMap
   );
   pipe(res);
 }
 
-function sendResponse(req, res, redirectToId) {
+function sendResponse(req: any, res: any, redirectToId: any) {
   const location = JSON.parse(req.query.location);
   if (redirectToId) {
     location.selectedId = redirectToId;
@@ -113,7 +112,7 @@ function sendResponse(req, res, redirectToId) {
   });
 }
 
-app.get('/react', function(req, res) {
+app.get('/react', function(req: any, res: any) {
   sendResponse(req, res, null);
 });
 
@@ -121,7 +120,7 @@ const NOTES_PATH = path.resolve(__dirname, '../notes');
 
 app.post(
   '/notes',
-  handleErrors(async function(req, res) {
+  handleErrors(async function(req: any, res: any) {
     const now = new Date();
     const result = await pool.query(
       'insert into notes (title, body, created_at, updated_at) values ($1, $2, $3, $3) returning id',
@@ -139,7 +138,7 @@ app.post(
 
 app.put(
   '/notes/:id',
-  handleErrors(async function(req, res) {
+  handleErrors(async function(req: any, res: any) {
     const now = new Date();
     const updatedId = Number(req.params.id);
     await pool.query(
@@ -157,7 +156,7 @@ app.put(
 
 app.delete(
   '/notes/:id',
-  handleErrors(async function(req, res) {
+  handleErrors(async function(req: any, res: any) {
     await pool.query('delete from notes where id = $1', [req.params.id]);
     await unlink(path.resolve(NOTES_PATH, `${req.params.id}.md`));
     sendResponse(req, res, null);
@@ -166,7 +165,7 @@ app.delete(
 
 app.get(
   '/notes',
-  handleErrors(async function(_req, res) {
+  handleErrors(async function(_req: any, res: any) {
     const {rows} = await pool.query('select * from notes order by id desc');
     res.json(rows);
   })
@@ -174,7 +173,7 @@ app.get(
 
 app.get(
   '/notes/:id',
-  handleErrors(async function(req, res) {
+  handleErrors(async function(req: any, res: any) {
     const {rows} = await pool.query('select * from notes where id = $1', [
       req.params.id,
     ]);
@@ -182,7 +181,7 @@ app.get(
   })
 );
 
-app.get('/sleep/:ms', function(req, res) {
+app.get('/sleep/:ms', function(req: any, res: any) {
   setTimeout(() => {
     res.json({ok: true});
   }, req.params.ms);

@@ -10,7 +10,6 @@
     "@babel/core": "7.12.3",
     "@babel/register": "^7.12.1",
     "@types/jest": "^27.0.3",
-    "@types/node": "^16.11.11",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
     "babel-loader": "8.1.0",
@@ -39,18 +38,20 @@
     "webpack-cli": "4.9.1"
   },
   "devDependencies": {
+    "@types/node": "^16.11.11",
     "cross-env": "^7.0.3",
-    "prettier": "1.19.1"
+    "prettier": "1.19.1",
+    "ts-node": "^10.4.0"
   },
   "scripts": {
     "start": "concurrently \"npm run server:dev\" \"npm run bundler:dev\"",
     "start:prod": "concurrently \"npm run server:prod\" \"npm run bundler:prod\"",
-    "server:dev": "cross-env NODE_ENV=development nodemon -- --conditions=react-server server",
+    "server:dev": "cross-env NODE_ENV=development nodemon --exec 'ts-node' -- --conditions=react-server server",
     "server:prod": "cross-env NODE_ENV=production nodemon -- --conditions=react-server server",
-    "bundler:dev": "cross-env NODE_ENV=development nodemon -- scripts/build.js",
+    "bundler:dev": "cross-env NODE_ENV=development nodemon --exec 'ts-node' -- scripts/build.js",
     "bundler:prod": "cross-env NODE_ENV=production nodemon -- scripts/build.js",
     "prettier": "prettier --write **/*.js",
-    "seed": "node ./scripts/seed.js"
+    "seed": "ts-node ./scripts/seed.js"
   },
   "babel": {
     "presets": [

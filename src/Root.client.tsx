@@ -11,8 +11,9 @@ import {ErrorBoundary} from 'react-error-boundary';
 
 import {useServerResponse} from './Cache.client';
 import {LocationContext} from './LocationContext.client';
+import {ILocation} from './types';
 
-export default function Root({initialCache}) {
+const Root = () => {
   return (
     <Suspense fallback={null}>
       <ErrorBoundary FallbackComponent={Error}>
@@ -22,8 +23,8 @@ export default function Root({initialCache}) {
   );
 }
 
-function Content() {
-  const [location, setLocation] = useState({
+const Content = () => {
+  const [location, setLocation] = useState<ILocation>({
     selectedId: null,
     isEditing: false,
     searchText: '',
@@ -36,7 +37,11 @@ function Content() {
   );
 }
 
-function Error({error}) {
+interface ErrorProps {
+  error: Error;
+}
+
+const Error: React.FC<ErrorProps> = ({error}) => {
   return (
     <div>
       <h1>Application Error</h1>
@@ -44,3 +49,5 @@ function Error({error}) {
     </div>
   );
 }
+
+export default Root;

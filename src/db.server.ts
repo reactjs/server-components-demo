@@ -6,8 +6,10 @@
  *
  */
 
+// @ts-ignore
 import {Pool} from 'react-pg';
 import credentials from '../credentials';
+import {DbPool} from './types';
 
 // Don't keep credentials in the source tree in a real app!
-export const db = new Pool(credentials);
+export const db = new Pool(credentials) as DbPool;

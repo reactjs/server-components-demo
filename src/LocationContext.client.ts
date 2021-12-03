@@ -7,8 +7,13 @@
  */
 
 import {createContext, useContext} from 'react';
+import {ILocation} from './types';
 
-export const LocationContext = createContext();
+export const LocationContext = createContext<ILocation>({
+  selectedId: null,
+  isEditing: false,
+  searchText: ''
+});
 export function useLocation() {
   return useContext(LocationContext);
 }

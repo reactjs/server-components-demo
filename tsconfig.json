@@ -15,7 +15,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["react-dom/next"]
+    "types": ["react-dom/next", "node"]
   },
-  "include": ["src"]
+  "include": ["src", "server"]
 }

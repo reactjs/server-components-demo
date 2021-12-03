@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   host: process.env.DB_HOST || 'localhost',
   database: 'notesapi',
   user: 'notesadmin',

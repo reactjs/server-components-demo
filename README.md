@@ -118,7 +118,7 @@ This demo is built on top of our Webpack plugin, but this is not how we envision
   - If you only uncomment it in `Note.server.js`, you'll see the fallback every time you open a note.
   - If you only uncomment it in `NoteList.server.js`, you'll see the list fallback on first page load.
   - If you uncomment it in both, it won't be very interesting because we have nothing new to show until they both respond.
-- Add a new Server Component and place it above the search bar in `App.server.js`. Import `db` from `db.server` and use `db.query()` from it to get the number of notes. Oberserve what happens when you add or delete a note.
+- Add a new Server Component and place it above the search bar in `App.server.tsx`. Import `db` from `db.server` and use `db.query()` from it to get the number of notes. Oberserve what happens when you add or delete a note.
 
 You can watch a [recorded walkthrough of all these demo points here](https://youtu.be/La4agIEgoNg?t=600) (with timestamps).
 

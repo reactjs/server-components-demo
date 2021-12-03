@@ -6,30 +6,33 @@
  *
  */
 
+// @ts-ignore
 import {unstable_getCacheForType, unstable_useCacheRefresh} from 'react';
+// @ts-ignore
 import {createFromFetch} from 'react-server-dom-webpack';
+import {ILocation, LocationCache} from './types';
 
-function createResponseCache() {
-  return new Map();
+function createResponseCache(): LocationCache {
+  return new Map<string, ILocation>();
 }
 
 export function useRefresh() {
   const refreshCache = unstable_useCacheRefresh();
-  return function refresh(key, seededResponse) {
+  return function refresh(key: string, seededResponse: ILocation) {
     refreshCache(createResponseCache, new Map([[key, seededResponse]]));
   };
 }
 
-export function useServerResponse(location) {
+export function useServerResponse(location: ILocation) {
   const key = JSON.stringify(location);
-  const cache = unstable_getCacheForType(createResponseCache);
+  const cache = unstable_getCacheForType(createResponseCache) as LocationCache;
   let response = cache.get(key);
-  if (response) {
+  if (response !== undefined) {
     return response;
   }
-  response = createFromFetch(
+  const fetchResponse = createFromFetch(
     fetch('/react?location=' + encodeURIComponent(key))
-  );
-  cache.set(key, response);
-  return response;
+  ) as ILocation;
+  cache.set(key, fetchResponse);
+  return fetchResponse;
 }

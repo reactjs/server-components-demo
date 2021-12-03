@@ -14,8 +14,14 @@ import EditButton from './EditButton.client';
 import SearchField from './SearchField.client';
 import NoteSkeleton from './NoteSkeleton';
 import NoteListSkeleton from './NoteListSkeleton';
+import {ILocation} from './types';
 
-export default function App({selectedId, isEditing, searchText}) {
+interface AppProps {
+  location: ILocation;
+}
+
+const App: React.FC<AppProps> = ({location}) => {
+  const {selectedId, isEditing, searchText} = location;
   return (
     <div className="main">
       <section className="col sidebar">
@@ -48,3 +54,5 @@ export default function App({selectedId, isEditing, searchText}) {
     </div>
   );
 }
+
+export default App;
