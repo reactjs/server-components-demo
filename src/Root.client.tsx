@@ -21,7 +21,7 @@ const Root = () => {
       </ErrorBoundary>
     </Suspense>
   );
-}
+};
 
 const Content = () => {
   const [location, setLocation] = useState<ILocation>({
@@ -35,7 +35,7 @@ const Content = () => {
       {response.readRoot()}
     </LocationContext.Provider>
   );
-}
+};
 
 interface ErrorProps {
   error: Error;
@@ -48,6 +48,6 @@ const Error: React.FC<ErrorProps> = ({error}) => {
       <pre style={{whiteSpace: 'pre-wrap'}}>{error.stack}</pre>
     </div>
   );
-}
+};
 
 export default Root;

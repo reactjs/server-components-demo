@@ -10,10 +10,10 @@
 import {unstable_getCacheForType, unstable_useCacheRefresh} from 'react';
 // @ts-ignore
 import {createFromFetch} from 'react-server-dom-webpack';
-import {ILocation, LocationCache} from './types';
+import {ILocation, LocationCache, Response} from './types';
 
 function createResponseCache(): LocationCache {
-  return new Map<string, ILocation>();
+  return new Map<string, Response>();
 }
 
 export function useRefresh() {
@@ -32,7 +32,7 @@ export function useServerResponse(location: ILocation) {
   }
   const fetchResponse = createFromFetch(
     fetch('/react?location=' + encodeURIComponent(key))
-  ) as ILocation;
+  ) as Response;
   cache.set(key, fetchResponse);
   return fetchResponse;
 }

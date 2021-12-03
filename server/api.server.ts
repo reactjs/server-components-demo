@@ -6,7 +6,7 @@
  *
  */
 
-import App from '../src/App.server'
+import App from '../src/App.server';
 
 const register = require('react-server-dom-webpack/node-register');
 register();
@@ -26,6 +26,7 @@ const {renderToPipeableStream} = require('react-server-dom-webpack/writer');
 const path = require('path');
 const {Pool} = require('pg');
 const React = require('react');
+// const App = require('../src/App.server');
 
 // Don't keep credentials in the source tree in a real app!
 const pool = new Pool(require('../credentials'));
