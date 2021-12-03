@@ -20,15 +20,18 @@ webpack(
   {
     mode: isProduction ? 'production' : 'development',
     devtool: isProduction ? 'source-map' : 'cheap-module-source-map',
-    entry: [path.resolve(__dirname, '../src/index.client.js')],
+    entry: [path.resolve(__dirname, '../src/index.client.tsx')],
     output: {
       path: path.resolve(__dirname, '../build'),
       filename: 'main.js',
     },
+    resolve: {
+      extensions: ['.ts', '.tsx', '.js', '.json', '.mjs'],
+    },
     module: {
       rules: [
         {
-          test: /\.js$/,
+          test: /\.(js|jsx|ts|tsx)?$/,
           use: 'babel-loader',
           exclude: /node_modules/,
         },
