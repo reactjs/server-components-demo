@@ -6,8 +6,6 @@
  *
  */
 
-import App from '../src/App.server';
-
 const register = require('react-server-dom-webpack/node-register');
 register();
 const babelRegister = require('@babel/register');
@@ -26,10 +24,10 @@ const {renderToPipeableStream} = require('react-server-dom-webpack/writer');
 const path = require('path');
 const {Pool} = require('pg');
 const React = require('react');
-// const App = require('../src/App.server');
+import App from '../src/App.server';
 
 // Don't keep credentials in the source tree in a real app!
-const pool = new Pool(require('../credentials'));
+const pool = new Pool(require('../credentials').default);
 
 const PORT = process.env.PORT || 4000;
 const app = express();
@@ -76,7 +74,7 @@ app.get(
   handleErrors(async function(_req: any, res: any) {
     await waitForWebpack();
     const html = readFileSync(
-      path.resolve(__dirname, '../build/index.html'),
+      path.resolve(__dirname, '../../build/index.html'),
       'utf8'
     );
     // Note: this is sending an empty HTML shell, like a client-side-only app.
@@ -89,7 +87,7 @@ app.get(
 async function renderReactTree(res: any, props: any) {
   await waitForWebpack();
   const manifest = readFileSync(
-    path.resolve(__dirname, '../build/react-client-manifest.json'),
+    path.resolve(__dirname, '../../build/react-client-manifest.json'),
     'utf8'
   );
   const moduleMap = JSON.parse(manifest);
@@ -107,9 +105,11 @@ function sendResponse(req: any, res: any, redirectToId: any) {
   }
   res.set('X-Location', JSON.stringify(location));
   renderReactTree(res, {
-    selectedId: location.selectedId,
-    isEditing: location.isEditing,
-    searchText: location.searchText,
+    location: {
+      selectedId: location.selectedId,
+      isEditing: location.isEditing,
+      searchText: location.searchText,
+    },
   });
 }
 
@@ -117,7 +117,7 @@ app.get('/react', function(req: any, res: any) {
   sendResponse(req, res, null);
 });
 
-const NOTES_PATH = path.resolve(__dirname, '../notes');
+const NOTES_PATH = path.resolve(__dirname, '../../notes');
 
 app.post(
   '/notes',
@@ -194,7 +194,7 @@ app.use(express.static('public'));
 async function waitForWebpack() {
   while (true) {
     try {
-      readFileSync(path.resolve(__dirname, '../build/index.html'));
+      readFileSync(path.resolve(__dirname, '../../build/index.html'));
       return;
     } catch (err) {
       console.log(
