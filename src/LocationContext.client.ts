@@ -9,15 +9,16 @@
 import {createContext, Dispatch, SetStateAction, useContext} from 'react';
 import {ILocation} from './types';
 
-export const LocationContext = createContext<
-  (ILocation | Dispatch<SetStateAction<ILocation>>)[]
->([
-  {
+export const LocationContext = createContext<{
+  location: ILocation;
+  setLocation?: Dispatch<SetStateAction<ILocation>>;
+}>({
+  location: {
     selectedId: null,
     isEditing: false,
     searchText: '',
   },
-]);
+});
 export function useLocation() {
   return useContext(LocationContext);
 }

@@ -6,12 +6,14 @@
  *
  */
 
-import {fetch} from 'react-fetch';
-
 import {db} from './db.server';
 import SidebarNote from './SidebarNote';
 
-export default function NoteList({searchText}) {
+interface NoteListProps {
+  searchText: string;
+}
+
+const NoteList: React.FC<NoteListProps> = ({searchText}) => {
   // const notes = fetch('http://localhost:4000/notes').json();
 
   // WARNING: This is for demo purposes only.
@@ -40,4 +42,6 @@ export default function NoteList({searchText}) {
         : 'No notes created yet!'}{' '}
     </div>
   );
-}
+};
+
+export default NoteList;

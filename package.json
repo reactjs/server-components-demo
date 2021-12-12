@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@types/node": "^16.11.11",
+    "@types/sanitize-html": "^2.6.0",
     "cross-env": "^7.0.3",
     "prettier": "1.19.1",
     "ts-node": "^10.4.0"

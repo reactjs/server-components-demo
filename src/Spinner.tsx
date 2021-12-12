@@ -6,7 +6,11 @@
  *
  */
 
-export default function Spinner({active = true}) {
+interface SpinnerProps {
+  active: boolean;
+}
+
+const Spinner: React.FC<SpinnerProps> = ({active = true}) => {
   return (
     <div
       className={['spinner', active && 'spinner--active'].join(' ')}
@@ -14,4 +18,6 @@ export default function Spinner({active = true}) {
       aria-busy={active ? 'true' : 'false'}
     />
   );
-}
+};
+
+export default Spinner;

@@ -6,23 +6,34 @@
  *
  */
 
-import {useState, useRef, useEffect, useTransition} from 'react';
+import {useState, useRef, useEffect, useTransition, ReactElement} from 'react';
 
 import {useLocation} from './LocationContext.client';
 
-export default function SidebarNote({id, title, children, expandedChildren}) {
-  const [location, setLocation] = useLocation();
+interface SidebarNoteProps {
+  id: number;
+  title: string;
+  expandedChildren: ReactElement;
+}
+
+const SidebarNote: React.FC<SidebarNoteProps> = ({
+  id,
+  title,
+  children,
+  expandedChildren,
+}) => {
+  const {location, setLocation} = useLocation();
   const [isPending, startTransition] = useTransition();
   const [isExpanded, setIsExpanded] = useState(false);
   const isActive = id === location.selectedId;
 
   // Animate after title is edited.
-  const itemRef = useRef(null);
+  const itemRef = useRef<HTMLDivElement>(null);
   const prevTitleRef = useRef(title);
   useEffect(() => {
     if (title !== prevTitleRef.current) {
       prevTitleRef.current = title;
-      itemRef.current.classList.add('flash');
+      itemRef.current && itemRef.current.classList.add('flash');
     }
   }, [title]);
 
@@ -30,7 +41,7 @@ export default function SidebarNote({id, title, children, expandedChildren}) {
     <div
       ref={itemRef}
       onAnimationEnd={() => {
-        itemRef.current.classList.remove('flash');
+        itemRef.current && itemRef.current.classList.remove('flash');
       }}
       className={[
         'sidebar-note-list-item',
@@ -51,11 +62,12 @@ export default function SidebarNote({id, title, children, expandedChildren}) {
         }}
         onClick={() => {
           startTransition(() => {
-            setLocation((loc) => ({
-              selectedId: id,
-              isEditing: false,
-              searchText: loc.searchText,
-            }));
+            setLocation &&
+              setLocation((loc) => ({
+                selectedId: id,
+                isEditing: false,
+                searchText: loc.searchText,
+              }));
           });
         }}>
         Open note for preview
@@ -80,4 +92,6 @@ export default function SidebarNote({id, title, children, expandedChildren}) {
       {isExpanded && expandedChildren}
     </div>
   );
-}
+};
+
+export default SidebarNote;

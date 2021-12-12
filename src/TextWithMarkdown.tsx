@@ -6,6 +6,7 @@
  *
  */
 
+// @ts-ignore
 import marked from 'marked';
 import sanitizeHtml from 'sanitize-html';
 
@@ -23,7 +24,11 @@ const allowedAttributes = Object.assign(
   }
 );
 
-export default function TextWithMarkdown({text}) {
+interface TextWithMarkdownProps {
+  text: string;
+}
+
+const TextWithMarkdown: React.FC<TextWithMarkdownProps> = ({text}) => {
   return (
     <div
       className="text-with-markdown"
@@ -35,4 +40,6 @@ export default function TextWithMarkdown({text}) {
       }}
     />
   );
-}
+};
+
+export default TextWithMarkdown;

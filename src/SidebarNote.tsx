@@ -7,12 +7,19 @@
  */
 
 import {format, isToday} from 'date-fns';
+// @ts-ignore
 import excerpts from 'excerpts';
+// @ts-ignore
 import marked from 'marked';
 
 import ClientSidebarNote from './SidebarNote.client';
+import {Note} from './types';
 
-export default function SidebarNote({note}) {
+interface SidebarNoteProps {
+  note: Note;
+}
+
+const SidebarNote: React.FC<SidebarNoteProps> = ({note}) => {
   const updatedAt = new Date(note.updated_at);
   const lastUpdatedAt = isToday(updatedAt)
     ? format(updatedAt, 'h:mm bb')
@@ -31,4 +38,6 @@ export default function SidebarNote({note}) {
       </header>
     </ClientSidebarNote>
   );
-}
+};
+
+export default SidebarNote;

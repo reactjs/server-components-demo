@@ -7,23 +7,35 @@
  */
 
 import {useState, useTransition} from 'react';
+// @ts-ignore
 import {createFromReadableStream} from 'react-server-dom-webpack';
 
 import NotePreview from './NotePreview';
 import {useRefresh} from './Cache.client';
 import {useLocation} from './LocationContext.client';
+import {ILocation} from './types';
 
-export default function NoteEditor({noteId, initialTitle, initialBody}) {
+interface NoteEditorProps {
+  noteId: number | null;
+  initialTitle: string;
+  initialBody: string;
+}
+
+const NoteEditor: React.FC<NoteEditorProps> = ({
+  noteId,
+  initialTitle,
+  initialBody,
+}) => {
   const refresh = useRefresh();
   const [title, setTitle] = useState(initialTitle);
   const [body, setBody] = useState(initialBody);
-  const [location, setLocation] = useLocation();
+  const {location, setLocation} = useLocation();
   const [isNavigating, startNavigating] = useTransition();
-  const [isSaving, saveNote] = useMutation({
+  const {isSaving, performMutation: saveNote} = useMutation({
     endpoint: noteId !== null ? `/notes/${noteId}` : `/notes`,
     method: noteId !== null ? 'PUT' : 'POST',
   });
-  const [isDeleting, deleteNote] = useMutation({
+  const {isSaving: isDeleting, performMutation: deleteNote} = useMutation({
     endpoint: `/notes/${noteId}`,
     method: 'DELETE',
   });
@@ -36,6 +48,11 @@ export default function NoteEditor({noteId, initialTitle, initialBody}) {
       searchText: location.searchText,
     };
     const response = await saveNote(payload, requestedLocation);
+
+    if (!response) {
+      throw new Error(`Something went wrong when saving note ${noteId}`);
+    }
+
     navigate(response);
   }
 
@@ -47,16 +64,26 @@ export default function NoteEditor({noteId, initialTitle, initialBody}) {
       searchText: location.searchText,
     };
     const response = await deleteNote(payload, requestedLocation);
+
+    if (!response) {
+      throw new Error(`Something went wrong when deleting note ${noteId}`);
+    }
+
     navigate(response);
   }
 
-  function navigate(response) {
+  function navigate(response: Response) {
     const cacheKey = response.headers.get('X-Location');
+
+    if (!cacheKey) {
+      throw new Error('X-Location header is not set');
+    }
+
     const nextLocation = JSON.parse(cacheKey);
     const seededResponse = createFromReadableStream(response.body);
     startNavigating(() => {
       refresh(cacheKey, seededResponse);
-      setLocation(nextLocation);
+      setLocation && setLocation(nextLocation);
     });
   }
 
@@ -126,13 +153,13 @@ export default function NoteEditor({noteId, initialTitle, initialBody}) {
           Preview
         </div>
         <h1 className="note-title">{title}</h1>
-        <NotePreview title={title} body={body} />
+        <NotePreview body={body} />
       </div>
     </div>
   );
-}
+};
 
-function useMutation({endpoint, method}) {
+function useMutation({endpoint, method}: {endpoint: string; method: string}) {
   const [isSaving, setIsSaving] = useState(false);
   const [didError, setDidError] = useState(false);
   const [error, setError] = useState(null);
@@ -141,7 +168,10 @@ function useMutation({endpoint, method}) {
     throw error;
   }
 
-  async function performMutation(payload, requestedLocation) {
+  async function performMutation(
+    payload: {title?: string; body?: string},
+    requestedLocation: ILocation
+  ) {
     setIsSaving(true);
     try {
       const response = await fetch(
@@ -162,11 +192,13 @@ function useMutation({endpoint, method}) {
       return response;
     } catch (e) {
       setDidError(true);
-      setError(e);
+      setError(e as any);
     } finally {
       setIsSaving(false);
     }
   }
 
-  return [isSaving, performMutation];
+  return {isSaving, performMutation};
 }
+
+export default NoteEditor;

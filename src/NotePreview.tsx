@@ -8,10 +8,16 @@
 
 import TextWithMarkdown from './TextWithMarkdown';
 
-export default function NotePreview({body}) {
+interface NotePreviewProps {
+  body: string;
+}
+
+const NotePreview: React.FC<NotePreviewProps> = ({body}) => {
   return (
     <div className="note-preview">
       <TextWithMarkdown text={body} />
     </div>
   );
-}
+};
+
+export default NotePreview;

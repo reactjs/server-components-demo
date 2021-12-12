@@ -6,7 +6,7 @@
  *
  */
 
-function NoteEditorSkeleton() {
+const NoteEditorSkeleton: React.FC = () => {
   return (
     <div
       className="note-editor skeleton-container"
@@ -41,7 +41,7 @@ function NoteEditorSkeleton() {
       </div>
     </div>
   );
-}
+};
 
 function NotePreviewSkeleton() {
   return (
@@ -70,6 +70,12 @@ function NotePreviewSkeleton() {
   );
 }
 
-export default function NoteSkeleton({isEditing}) {
-  return isEditing ? <NoteEditorSkeleton /> : <NotePreviewSkeleton />;
+interface NoteSkeletonProps {
+  isEditing: boolean;
 }
+
+const NoteSkeleton: React.FC<NoteSkeletonProps> = ({isEditing}) => {
+  return isEditing ? <NoteEditorSkeleton /> : <NotePreviewSkeleton />;
+};
+
+export default NoteSkeleton;

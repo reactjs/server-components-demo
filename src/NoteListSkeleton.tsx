@@ -6,7 +6,7 @@
  *
  */
 
-export default function NoteListSkeleton() {
+const NoteListSkeleton: React.FC = () => {
   return (
     <div>
       <ul className="notes-list skeleton-container">
@@ -31,4 +31,6 @@ export default function NoteListSkeleton() {
       </ul>
     </div>
   );
-}
+};
+
+export default NoteListSkeleton;

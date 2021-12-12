@@ -6,16 +6,20 @@
  *
  */
 
+// @ts-ignore
 import {fetch} from 'react-fetch';
-import {readFile} from 'react-fs';
 import {format} from 'date-fns';
-import path from 'path';
 
 import NotePreview from './NotePreview';
 import EditButton from './EditButton.client';
 import NoteEditor from './NoteEditor.client';
 
-export default function Note({selectedId, isEditing}) {
+interface NoteProps {
+  selectedId: number | null;
+  isEditing: boolean;
+}
+
+const Note: React.FC<NoteProps> = ({selectedId, isEditing}) => {
   const note =
     selectedId != null
       ? fetch(`http://localhost:4000/notes/${selectedId}`).json()
@@ -64,4 +68,6 @@ export default function Note({selectedId, isEditing}) {
       </div>
     );
   }
-}
+};
+
+export default Note;

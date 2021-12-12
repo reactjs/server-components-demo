@@ -31,7 +31,7 @@ const Content = () => {
   });
   const response = useServerResponse(location);
   return (
-    <LocationContext.Provider value={[location, setLocation]}>
+    <LocationContext.Provider value={{location, setLocation}}>
       {response.readRoot()}
     </LocationContext.Provider>
   );

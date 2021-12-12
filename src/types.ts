@@ -9,12 +9,13 @@ export interface ILocation {
 export type LocationCache = Map<string, Response>;
 
 export interface DbPool {
-  query: (sql: string, args: string[]) => Note[];
+  query: (sql: string, args: string[]) => {rows: Note[]};
 }
 
 export interface Note {
   id: number;
   title: string;
+  body: string;
   updated_at: Date;
 }
 

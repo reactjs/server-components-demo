@@ -10,6 +10,7 @@
 
 # production
 /build
+/out
 /dist
 
 # notes
