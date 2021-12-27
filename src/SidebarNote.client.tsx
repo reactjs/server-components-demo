@@ -89,6 +89,9 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
           <img src="chevron-up.svg" width="10px" height="10px" alt="Expand" />
         )}
       </button>
+      <button className="sidebar-note-toggle-favorite">
+        <img src="star-line.svg" width="20px" height="20px" alt="Expand" />
+      </button>
       {isExpanded && expandedChildren}
     </div>
   );

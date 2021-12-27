@@ -342,7 +342,7 @@ ul.notes-list {
 }
 .sidebar-note-header {
   z-index: 1;
-  max-width: 85%;
+  max-width: 65%;
   pointer-events: none;
 }
 .sidebar-note-header > strong {
@@ -380,6 +380,11 @@ ul.notes-list {
 .sidebar-note-toggle-expand img {
   width: 10px;
   height: 10px;
+}
+
+.sidebar-note-toggle-favorite {
+  z-index: 2;
+  border: none;
 }
 
 .sidebar-note-excerpt {
