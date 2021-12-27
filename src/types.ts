@@ -16,6 +16,7 @@ export interface Note {
   id: number;
   title: string;
   body: string;
+  is_favorite: boolean;
   updated_at: Date;
 }
 

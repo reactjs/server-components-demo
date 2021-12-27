@@ -13,12 +13,14 @@ import {useLocation} from './LocationContext.client';
 interface SidebarNoteProps {
   id: number;
   title: string;
+  isFavorite: boolean;
   expandedChildren: ReactElement;
 }
 
 const SidebarNote: React.FC<SidebarNoteProps> = ({
   id,
   title,
+  isFavorite,
   children,
   expandedChildren,
 }) => {
@@ -90,7 +92,12 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
         )}
       </button>
       <button className="sidebar-note-toggle-favorite">
-        <img src="star-line.svg" width="20px" height="20px" alt="Expand" />
+        <img
+          src={isFavorite ? 'star-fill.svg' : 'star-line.svg'}
+          width="20px"
+          height="20px"
+          alt="Expand"
+        />
       </button>
       {isExpanded && expandedChildren}
     </div>
