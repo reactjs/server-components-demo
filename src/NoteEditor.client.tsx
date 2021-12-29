@@ -6,15 +6,10 @@
  *
  */
 
-import {useState, useTransition} from 'react';
-// @ts-ignore
-import {createFromReadableStream} from 'react-server-dom-webpack';
+import {useState} from 'react';
 
 import NotePreview from './NotePreview';
-import {useRefresh} from './Cache.client';
-import {useLocation} from './LocationContext.client';
-import {ILocation} from './types';
-import {useMutation} from "./util";
+import {useMutation, useNavigation} from './util';
 
 interface NoteEditorProps {
   noteId: number | null;
@@ -27,11 +22,9 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
   initialTitle,
   initialBody,
 }) => {
-  const refresh = useRefresh();
+  const {isNavigating, navigate, location} = useNavigation();
   const [title, setTitle] = useState(initialTitle);
   const [body, setBody] = useState(initialBody);
-  const {location, setLocation} = useLocation();
-  const [isNavigating, startNavigating] = useTransition();
   const {isSaving, performMutation: saveNote} = useMutation({
     endpoint: noteId !== null ? `/notes/${noteId}` : `/notes`,
     method: noteId !== null ? 'PUT' : 'POST',
@@ -71,21 +64,6 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
     }
 
     navigate(response);
-  }
-
-  function navigate(response: Response) {
-    const cacheKey = response.headers.get('X-Location');
-
-    if (!cacheKey) {
-      throw new Error('X-Location header is not set');
-    }
-
-    const nextLocation = JSON.parse(cacheKey);
-    const seededResponse = createFromReadableStream(response.body);
-    startNavigating(() => {
-      refresh(cacheKey, seededResponse);
-      setLocation && setLocation(nextLocation);
-    });
   }
 
   const isDraft = noteId === null;
@@ -159,7 +137,5 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
     </div>
   );
 };
-
-
 
 export default NoteEditor;
