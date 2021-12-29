@@ -148,14 +148,17 @@ app.put(
     let index = 1;
 
     Object.keys(req.body).forEach((key) => {
-      query += `${key} = $${index} `;
+      query += `${key} = $${index},`;
       index++;
 
       params.push(req.body[key]);
     });
+    query = query.slice(0, -1);
 
-    query += `where id = $${index}`;
+    query += ` where id = $${index}`;
     params.push(updatedId);
+
+    console.log(query);
 
     await pool.query(query, params);
 
