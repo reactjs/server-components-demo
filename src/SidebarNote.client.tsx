@@ -45,14 +45,18 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
     method: 'PUT',
   });
 
-  function toggleFavorite() {
+  async function toggleFavorite() {
     const payload = {favorite: !favorite};
     const requestedLocation = {
       selectedId: id,
       isEditing: false,
       searchText: location.searchText,
     };
-    updateNote(payload, requestedLocation);
+    const response = await updateNote(payload, requestedLocation);
+
+    if (!response) {
+      throw new Error(`Something went wrong when saving note ${id}`);
+    }
   }
 
   return (
