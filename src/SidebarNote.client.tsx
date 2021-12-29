@@ -9,7 +9,7 @@
 import {useState, useRef, useEffect, useTransition, ReactElement} from 'react';
 
 import {useLocation} from './LocationContext.client';
-import {useMutation} from "./util";
+import {useMutation, useNavigation} from './util';
 
 interface SidebarNoteProps {
   id: number;
@@ -25,6 +25,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
   children,
   expandedChildren,
 }) => {
+  const {navigate} = useNavigation();
   const {location, setLocation} = useLocation();
   const [isPending, startTransition] = useTransition();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -57,6 +58,8 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
     if (!response) {
       throw new Error(`Something went wrong when saving note ${id}`);
     }
+
+    navigate(response);
   }
 
   return (
