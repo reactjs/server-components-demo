@@ -34,9 +34,9 @@ const createTableStatement = `CREATE TABLE notes (
   updated_at TIMESTAMP NOT NULL,
   title TEXT,
   body TEXT,
-  is_favorite BOOLEAN
+  favorite BOOLEAN
 );`;
-const insertNoteStatement = `INSERT INTO notes(title, body, is_favorite, created_at, updated_at)
+const insertNoteStatement = `INSERT INTO notes(title, body, favorite, created_at, updated_at)
   VALUES ($1, $2, $3, $4, $4)
   RETURNING *`;
 const seedData = [

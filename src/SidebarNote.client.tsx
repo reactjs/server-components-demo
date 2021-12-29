@@ -9,18 +9,19 @@
 import {useState, useRef, useEffect, useTransition, ReactElement} from 'react';
 
 import {useLocation} from './LocationContext.client';
+import {useMutation} from './useMutation';
 
 interface SidebarNoteProps {
   id: number;
   title: string;
-  isFavorite: boolean;
+  favorite: boolean;
   expandedChildren: ReactElement;
 }
 
 const SidebarNote: React.FC<SidebarNoteProps> = ({
   id,
   title,
-  isFavorite,
+  favorite,
   children,
   expandedChildren,
 }) => {
@@ -38,6 +39,21 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
       itemRef.current && itemRef.current.classList.add('flash');
     }
   }, [title]);
+
+  const {performMutation: updateNote} = useMutation({
+    endpoint: `/notes/${id}`,
+    method: 'PUT',
+  });
+
+  function toggleFavorite() {
+    const payload = {favorite: !favorite};
+    const requestedLocation = {
+      selectedId: id,
+      isEditing: false,
+      searchText: location.searchText,
+    };
+    updateNote(payload, requestedLocation);
+  }
 
   return (
     <div
@@ -91,9 +107,9 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
           <img src="chevron-up.svg" width="10px" height="10px" alt="Expand" />
         )}
       </button>
-      <button className="sidebar-note-toggle-favorite">
+      <button className="sidebar-note-toggle-favorite" onClick={toggleFavorite}>
         <img
-          src={isFavorite ? 'star-fill.svg' : 'star-line.svg'}
+          src={favorite ? 'star-fill.svg' : 'star-line.svg'}
           width="20px"
           height="20px"
           alt="Expand"
