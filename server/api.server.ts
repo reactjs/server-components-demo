@@ -158,8 +158,6 @@ app.put(
     query += ` where id = $${index}`;
     params.push(updatedId);
 
-    console.log(query);
-
     await pool.query(query, params);
 
     if (req.body.body) {
