@@ -14,7 +14,7 @@ import NotePreview from './NotePreview';
 import {useRefresh} from './Cache.client';
 import {useLocation} from './LocationContext.client';
 import {ILocation} from './types';
-import {useMutation} from "./useMutation";
+import {useMutation} from "./util";
 
 interface NoteEditorProps {
   noteId: number | null;

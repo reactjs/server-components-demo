@@ -9,7 +9,7 @@
 import {useState, useRef, useEffect, useTransition, ReactElement} from 'react';
 
 import {useLocation} from './LocationContext.client';
-import {useMutation} from './useMutation';
+import {useMutation} from "./util";
 
 interface SidebarNoteProps {
   id: number;
