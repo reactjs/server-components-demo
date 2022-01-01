@@ -15,7 +15,7 @@ interface EditButtonProps {
 }
 
 const EditButton: React.FC<EditButtonProps> = ({noteId, children}) => {
-  const {setLocation} = useLocation();
+  const {location, setLocation} = useLocation();
   const [isPending, startTransition] = useTransition();
   const isDraft = noteId == null;
   return (
@@ -32,6 +32,7 @@ const EditButton: React.FC<EditButtonProps> = ({noteId, children}) => {
               selectedId: noteId,
               isEditing: true,
               searchText: loc.searchText,
+              filterFavorites: location.filterFavorites,
             }));
         });
       }}

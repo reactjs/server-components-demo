@@ -52,6 +52,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
       selectedId: id,
       isEditing: false,
       searchText: location.searchText,
+      filterFavorites: location.filterFavorites,
     };
     const response = await updateNote(payload, requestedLocation);
 
@@ -92,6 +93,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
                 selectedId: id,
                 isEditing: false,
                 searchText: loc.searchText,
+                filterFavorites: loc.filterFavorites,
               }));
           });
         }}>

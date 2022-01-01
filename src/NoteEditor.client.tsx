@@ -40,6 +40,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
       selectedId: noteId,
       isEditing: false,
       searchText: location.searchText,
+      filterFavorites: location.filterFavorites,
     };
     const response = await saveNote(payload, requestedLocation);
 
@@ -56,6 +57,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
       selectedId: null,
       isEditing: false,
       searchText: location.searchText,
+      filterFavorites: location.filterFavorites,
     };
     const response = await deleteNote(payload, requestedLocation);
 
