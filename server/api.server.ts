@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+import {ILocation} from '../src/types';
 
 const register = require('react-server-dom-webpack/node-register');
 register();
@@ -84,7 +85,7 @@ app.get(
   })
 );
 
-async function renderReactTree(res: any, props: any) {
+async function renderReactTree(res: any, props: {location: ILocation}) {
   await waitForWebpack();
   const manifest = readFileSync(
     path.resolve(__dirname, '../../build/react-client-manifest.json'),
@@ -109,6 +110,7 @@ function sendResponse(req: any, res: any, redirectToId: any) {
       selectedId: location.selectedId,
       isEditing: location.isEditing,
       searchText: location.searchText,
+      filterFavorites: location.filterFavorites,
     },
   });
 }
