@@ -219,7 +219,7 @@ hr {
   margin-inline-end: 10px;
 }
 
-.edit-button {
+.button {
   border-radius: 100px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -257,6 +257,10 @@ hr {
 }
 .edit-button--outline:focus {
   box-shadow: var(--outline-box-shadow);
+}
+.favorite-button {
+  margin-inline-start: 6px;
+  border: none;
 }
 
 ul.notes-list {

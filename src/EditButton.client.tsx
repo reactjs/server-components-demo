@@ -21,7 +21,7 @@ const EditButton: React.FC<EditButtonProps> = ({noteId, children}) => {
   return (
     <button
       className={[
-        'edit-button',
+        'button',
         isDraft ? 'edit-button--solid' : 'edit-button--outline',
       ].join(' ')}
       disabled={isPending}
