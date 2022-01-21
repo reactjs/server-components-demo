@@ -33,21 +33,24 @@ const createTableStatement = `CREATE TABLE notes (
   created_at TIMESTAMP NOT NULL,
   updated_at TIMESTAMP NOT NULL,
   title TEXT,
-  body TEXT
+  body TEXT,
+  favorite BOOLEAN
 );`;
-const insertNoteStatement = `INSERT INTO notes(title, body, created_at, updated_at)
-  VALUES ($1, $2, $3, $3)
+const insertNoteStatement = `INSERT INTO notes(title, body, favorite, created_at, updated_at)
+  VALUES ($1, $2, $3, $4, $4)
   RETURNING *`;
 const seedData = [
   [
     'Meeting Notes',
     'This is an example note. It contains **Markdown**!',
+    true,
     randomDateBetween(startOfThisYear, now),
   ],
   [
     'Make a thing',
     `It's very easy to make some words **bold** and other words *italic* with
 Markdown. You can even [link to React's website!](https://www.reactjs.org).`,
+    false,
     randomDateBetween(startOfThisYear, now),
   ],
   [
@@ -56,9 +59,10 @@ Markdown. You can even [link to React's website!](https://www.reactjs.org).`,
 notes in this app! These note live on the server in the \`notes\` folder.
 
 ![This app is powered by React](https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/React_Native_Logo.png/800px-React_Native_Logo.png)`,
+    false,
     randomDateBetween(startOfThisYear, now),
   ],
-  ['I wrote this note today', 'It was an excellent note.', now],
+  ['I wrote this note today', 'It was an excellent note.', true, now],
 ];
 
 async function seed() {

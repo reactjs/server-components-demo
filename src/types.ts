@@ -4,6 +4,7 @@ export interface ILocation {
   selectedId: number | null;
   isEditing: boolean;
   searchText: string;
+  filterFavorites: boolean;
 }
 
 export type LocationCache = Map<string, Response>;
@@ -16,6 +17,7 @@ export interface Note {
   id: number;
   title: string;
   body: string;
+  favorite: boolean;
   updated_at: Date;
 }
 

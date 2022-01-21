@@ -15,13 +15,13 @@ interface EditButtonProps {
 }
 
 const EditButton: React.FC<EditButtonProps> = ({noteId, children}) => {
-  const {setLocation} = useLocation();
+  const {location, setLocation} = useLocation();
   const [isPending, startTransition] = useTransition();
   const isDraft = noteId == null;
   return (
     <button
       className={[
-        'edit-button',
+        'button',
         isDraft ? 'edit-button--solid' : 'edit-button--outline',
       ].join(' ')}
       disabled={isPending}
@@ -32,6 +32,7 @@ const EditButton: React.FC<EditButtonProps> = ({noteId, children}) => {
               selectedId: noteId,
               isEditing: true,
               searchText: loc.searchText,
+              filterFavorites: location.filterFavorites,
             }));
         });
       }}

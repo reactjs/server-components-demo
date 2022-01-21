@@ -11,18 +11,20 @@ import SidebarNote from './SidebarNote';
 
 interface NoteListProps {
   searchText: string;
+  filterFavorites: boolean;
 }
 
-const NoteList: React.FC<NoteListProps> = ({searchText}) => {
+const NoteList: React.FC<NoteListProps> = ({searchText, filterFavorites}) => {
   // const notes = fetch('http://localhost:4000/notes').json();
 
   // WARNING: This is for demo purposes only.
   // We don't encourage this in real apps. There are far safer ways to access
   // data in a real application!
-  const notes = db.query(
-    `select * from notes where title ilike $1 order by id desc`,
-    ['%' + searchText + '%']
-  ).rows;
+  const query = filterFavorites
+    ? `select * from notes where title ilike $1 AND favorite=true order by id desc`
+    : `select * from notes where title ilike $1 order by id desc`;
+
+  const notes = db.query(query, ['%' + searchText + '%']).rows;
 
   // Now let's see how the Suspense boundary above lets us not block on this.
   // fetch('http://localhost:4000/sleep/3000');

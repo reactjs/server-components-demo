@@ -219,7 +219,7 @@ hr {
   margin-inline-end: 10px;
 }
 
-.edit-button {
+.button {
   border-radius: 100px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -257,6 +257,10 @@ hr {
 }
 .edit-button--outline:focus {
   box-shadow: var(--outline-box-shadow);
+}
+.favorite-button {
+  margin-inline-start: 6px;
+  border: none;
 }
 
 ul.notes-list {
@@ -342,7 +346,7 @@ ul.notes-list {
 }
 .sidebar-note-header {
   z-index: 1;
-  max-width: 85%;
+  max-width: 65%;
   pointer-events: none;
 }
 .sidebar-note-header > strong {
@@ -380,6 +384,11 @@ ul.notes-list {
 .sidebar-note-toggle-expand img {
   width: 10px;
   height: 10px;
+}
+
+.sidebar-note-toggle-favorite {
+  z-index: 2;
+  border: none;
 }
 
 .sidebar-note-excerpt {

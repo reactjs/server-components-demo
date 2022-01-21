@@ -15,13 +15,14 @@ import SearchField from './SearchField.client';
 import NoteSkeleton from './NoteSkeleton';
 import NoteListSkeleton from './NoteListSkeleton';
 import {ILocation} from './types';
+import FilterButton from './FilterButton.client';
 
 interface AppProps {
   location: ILocation;
 }
 
 const App: React.FC<AppProps> = ({location}) => {
-  const {selectedId, isEditing, searchText} = location;
+  const {selectedId, isEditing, searchText, filterFavorites} = location;
   return (
     <div className="main">
       <section className="col sidebar">
@@ -38,11 +39,15 @@ const App: React.FC<AppProps> = ({location}) => {
         </section>
         <section className="sidebar-menu" role="menubar">
           <SearchField />
+          <FilterButton />
           <EditButton noteId={null}>New</EditButton>
         </section>
         <nav>
           <Suspense fallback={<NoteListSkeleton />}>
-            <NoteList searchText={searchText} />
+            <NoteList
+              searchText={searchText}
+              filterFavorites={filterFavorites}
+            />
           </Suspense>
         </nav>
       </section>
@@ -53,6 +58,6 @@ const App: React.FC<AppProps> = ({location}) => {
       </section>
     </div>
   );
-}
+};
 
 export default App;

@@ -6,14 +6,10 @@
  *
  */
 
-import {useState, useTransition} from 'react';
-// @ts-ignore
-import {createFromReadableStream} from 'react-server-dom-webpack';
+import {useState} from 'react';
 
 import NotePreview from './NotePreview';
-import {useRefresh} from './Cache.client';
-import {useLocation} from './LocationContext.client';
-import {ILocation} from './types';
+import {useMutation, useNavigation} from './util';
 
 interface NoteEditorProps {
   noteId: number | null;
@@ -26,11 +22,9 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
   initialTitle,
   initialBody,
 }) => {
-  const refresh = useRefresh();
+  const {isNavigating, navigate, location} = useNavigation();
   const [title, setTitle] = useState(initialTitle);
   const [body, setBody] = useState(initialBody);
-  const {location, setLocation} = useLocation();
-  const [isNavigating, startNavigating] = useTransition();
   const {isSaving, performMutation: saveNote} = useMutation({
     endpoint: noteId !== null ? `/notes/${noteId}` : `/notes`,
     method: noteId !== null ? 'PUT' : 'POST',
@@ -46,6 +40,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
       selectedId: noteId,
       isEditing: false,
       searchText: location.searchText,
+      filterFavorites: location.filterFavorites,
     };
     const response = await saveNote(payload, requestedLocation);
 
@@ -62,6 +57,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
       selectedId: null,
       isEditing: false,
       searchText: location.searchText,
+      filterFavorites: location.filterFavorites,
     };
     const response = await deleteNote(payload, requestedLocation);
 
@@ -70,21 +66,6 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
     }
 
     navigate(response);
-  }
-
-  function navigate(response: Response) {
-    const cacheKey = response.headers.get('X-Location');
-
-    if (!cacheKey) {
-      throw new Error('X-Location header is not set');
-    }
-
-    const nextLocation = JSON.parse(cacheKey);
-    const seededResponse = createFromReadableStream(response.body);
-    startNavigating(() => {
-      refresh(cacheKey, seededResponse);
-      setLocation && setLocation(nextLocation);
-    });
   }
 
   const isDraft = noteId === null;
@@ -158,47 +139,5 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
     </div>
   );
 };
-
-function useMutation({endpoint, method}: {endpoint: string; method: string}) {
-  const [isSaving, setIsSaving] = useState(false);
-  const [didError, setDidError] = useState(false);
-  const [error, setError] = useState(null);
-  if (didError) {
-    // Let the nearest error boundary handle errors while saving.
-    throw error;
-  }
-
-  async function performMutation(
-    payload: {title?: string; body?: string},
-    requestedLocation: ILocation
-  ) {
-    setIsSaving(true);
-    try {
-      const response = await fetch(
-        `${endpoint}?location=${encodeURIComponent(
-          JSON.stringify(requestedLocation)
-        )}`,
-        {
-          method,
-          body: JSON.stringify(payload),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(await response.text());
-      }
-      return response;
-    } catch (e) {
-      setDidError(true);
-      setError(e as any);
-    } finally {
-      setIsSaving(false);
-    }
-  }
-
-  return {isSaving, performMutation};
-}
 
 export default NoteEditor;

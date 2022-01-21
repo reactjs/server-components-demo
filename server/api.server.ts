@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+import {ILocation} from '../src/types';
 
 const register = require('react-server-dom-webpack/node-register');
 register();
@@ -84,7 +85,7 @@ app.get(
   })
 );
 
-async function renderReactTree(res: any, props: any) {
+async function renderReactTree(res: any, props: {location: ILocation}) {
   await waitForWebpack();
   const manifest = readFileSync(
     path.resolve(__dirname, '../../build/react-client-manifest.json'),
@@ -109,6 +110,7 @@ function sendResponse(req: any, res: any, redirectToId: any) {
       selectedId: location.selectedId,
       isEditing: location.isEditing,
       searchText: location.searchText,
+      filterFavorites: location.filterFavorites,
     },
   });
 }
@@ -142,15 +144,31 @@ app.put(
   handleErrors(async function(req: any, res: any) {
     const now = new Date();
     const updatedId = Number(req.params.id);
-    await pool.query(
-      'update notes set title = $1, body = $2, updated_at = $3 where id = $4',
-      [req.body.title, req.body.body, now, updatedId]
-    );
-    await writeFile(
-      path.resolve(NOTES_PATH, `${updatedId}.md`),
-      req.body.body,
-      'utf8'
-    );
+
+    let query = 'update notes set ';
+    const params = [];
+    let index = 1;
+
+    Object.keys(req.body).forEach((key) => {
+      query += `${key} = $${index},`;
+      index++;
+
+      params.push(req.body[key]);
+    });
+    query = query.slice(0, -1);
+
+    query += ` where id = $${index}`;
+    params.push(updatedId);
+
+    await pool.query(query, params);
+
+    if (req.body.body) {
+      await writeFile(
+        path.resolve(NOTES_PATH, `${updatedId}.md`),
+        req.body.body,
+        'utf8'
+      );
+    }
     sendResponse(req, res, null);
   })
 );

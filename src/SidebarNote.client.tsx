@@ -9,19 +9,23 @@
 import {useState, useRef, useEffect, useTransition, ReactElement} from 'react';
 
 import {useLocation} from './LocationContext.client';
+import {useMutation, useNavigation} from './util';
 
 interface SidebarNoteProps {
   id: number;
   title: string;
+  favorite: boolean;
   expandedChildren: ReactElement;
 }
 
 const SidebarNote: React.FC<SidebarNoteProps> = ({
   id,
   title,
+  favorite,
   children,
   expandedChildren,
 }) => {
+  const {navigate} = useNavigation();
   const {location, setLocation} = useLocation();
   const [isPending, startTransition] = useTransition();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -36,6 +40,28 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
       itemRef.current && itemRef.current.classList.add('flash');
     }
   }, [title]);
+
+  const {performMutation: updateNote} = useMutation({
+    endpoint: `/notes/${id}`,
+    method: 'PUT',
+  });
+
+  async function toggleFavorite() {
+    const payload = {favorite: !favorite};
+    const requestedLocation = {
+      selectedId: id,
+      isEditing: false,
+      searchText: location.searchText,
+      filterFavorites: location.filterFavorites,
+    };
+    const response = await updateNote(payload, requestedLocation);
+
+    if (!response) {
+      throw new Error(`Something went wrong when saving note ${id}`);
+    }
+
+    navigate(response);
+  }
 
   return (
     <div
@@ -67,6 +93,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
                 selectedId: id,
                 isEditing: false,
                 searchText: loc.searchText,
+                filterFavorites: loc.filterFavorites,
               }));
           });
         }}>
@@ -88,6 +115,14 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
         ) : (
           <img src="chevron-up.svg" width="10px" height="10px" alt="Expand" />
         )}
+      </button>
+      <button className="sidebar-note-toggle-favorite" onClick={toggleFavorite}>
+        <img
+          src={favorite ? 'star-fill.svg' : 'star-line.svg'}
+          width="20px"
+          height="20px"
+          alt="Expand"
+        />
       </button>
       {isExpanded && expandedChildren}
     </div>

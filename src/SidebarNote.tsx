@@ -29,6 +29,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({note}) => {
     <ClientSidebarNote
       id={note.id}
       title={note.title}
+      favorite={note.favorite}
       expandedChildren={
         <p className="sidebar-note-excerpt">{summary || <i>(No content)</i>}</p>
       }>
