@@ -29,6 +29,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
   const {location, setLocation} = useLocation();
   const [isPending, startTransition] = useTransition();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isPendingToggleFavorite, setIsPendingToggleFavorite] = useState(false);
   const isActive = id === location.selectedId;
 
   // Animate after title is edited.
@@ -54,6 +55,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
       searchText: location.searchText,
       filterFavorites: location.filterFavorites,
     };
+    setIsPendingToggleFavorite(true);
     const response = await updateNote(payload, requestedLocation);
 
     if (!response) {
@@ -61,6 +63,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
     }
 
     navigate(response);
+    setIsPendingToggleFavorite(false);
   }
 
   return (
@@ -116,7 +119,13 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
           <img src="chevron-up.svg" width="10px" height="10px" alt="Expand" />
         )}
       </button>
-      <button className="sidebar-note-toggle-favorite" onClick={toggleFavorite}>
+      <button className="sidebar-note-toggle-favorite"
+        onClick={toggleFavorite}
+        disabled={isPendingToggleFavorite}
+        style={{
+          opacity: isPendingToggleFavorite ? '0.5' : '1.0'
+        }}
+      >
         <img
           src={favorite ? 'star-fill.svg' : 'star-line.svg'}
           width="20px"
