@@ -7,7 +7,7 @@
  */
 
 import {unstable_getCacheForType, unstable_useCacheRefresh} from 'react';
-import {createFromFetch} from 'react-server-dom-webpack';
+import {createFromFetch} from 'react-server-dom-webpack/client';
 
 function createResponseCache() {
   return new Map();
