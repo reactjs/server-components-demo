@@ -6,22 +6,18 @@
  *
  */
 
-import {fetch} from 'react-fetch';
-import {readFile} from 'react-fs';
 import {format} from 'date-fns';
-import path from 'path';
+
+// Uncomment if you want to read from a file instead.
+// import {readFile} from 'fs/promises';
+// import {resolve} from 'path';
 
 import NotePreview from './NotePreview';
-import EditButton from './EditButton.client';
-import NoteEditor from './NoteEditor.client';
+import EditButton from './EditButton';
+import NoteEditor from './NoteEditor';
 
-export default function Note({selectedId, isEditing}) {
-  const note =
-    selectedId != null
-      ? fetch(`http://localhost:4000/notes/${selectedId}`).json()
-      : null;
-
-  if (note === null) {
+export default async function Note({selectedId, isEditing}) {
+  if (selectedId === null) {
     if (isEditing) {
       return (
         <NoteEditor noteId={null} initialTitle="Untitled" initialBody="" />
@@ -37,14 +33,17 @@ export default function Note({selectedId, isEditing}) {
     }
   }
 
+  const noteResponse = await fetch(`http://localhost:4000/notes/${selectedId}`);
+  const note = await noteResponse.json();
+
   let {id, title, body, updated_at} = note;
   const updatedAt = new Date(updated_at);
 
   // We could also read from a file instead.
-  // body = readFile(path.resolve(`./notes/${note.id}.md`), 'utf8');
+  // body = await readFile(resolve(`./notes/${note.id}.md`), 'utf8');
 
   // Now let's see how the Suspense boundary above lets us not block on this.
-  // fetch('http://localhost:4000/sleep/3000');
+  // await fetch('http://localhost:4000/sleep/3000');
 
   if (isEditing) {
     return <NoteEditor noteId={id} initialTitle={title} initialBody={body} />;

@@ -6,12 +6,13 @@
  *
  */
 
+'use client';
+
 import {useState, useRef, useEffect, useTransition} from 'react';
+import {useRouter} from './framework/router';
 
-import {useLocation} from './LocationContext.client';
-
-export default function SidebarNote({id, title, children, expandedChildren}) {
-  const [location, setLocation] = useLocation();
+export default function SidebarNoteContent({id, title, children, expandedChildren}) {
+  const {location, navigate} = useRouter();
   const [isPending, startTransition] = useTransition();
   const [isExpanded, setIsExpanded] = useState(false);
   const isActive = id === location.selectedId;
@@ -51,11 +52,10 @@ export default function SidebarNote({id, title, children, expandedChildren}) {
         }}
         onClick={() => {
           startTransition(() => {
-            setLocation((loc) => ({
+            navigate({
               selectedId: id,
               isEditing: false,
-              searchText: loc.searchText,
-            }));
+            });
           });
         }}>
         Open note for preview

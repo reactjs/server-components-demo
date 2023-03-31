@@ -18,6 +18,8 @@
 
 This is a demo app built with Server Components, an experimental React feature. **We strongly recommend [watching our talk introducing Server Components](https://reactjs.org/server-components) before exploring this demo.** The talk includes a walkthrough of the demo code and highlights key points of how Server Components work and what features they provide.
 
+**Update (March 2023):** This demo has been updated to match the [latest conventions](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components).
+
 ## When will I be able to use this?
 
 Server Components are an experimental feature and **are not ready for adoption**. For now, we recommend experimenting with Server Components via this demo app. **Use this in your projects at your own risk.**
@@ -28,16 +30,16 @@ If you use this demo to compare React Server Components to the framework of your
 
 * **This demo doesn’t have server rendering.** Server Components are a separate (but complementary) technology from Server Rendering (SSR). Server Components let you run some of your components purely on the server. SSR, on the other hand, lets you generate HTML before any JavaScript loads. This demo *only* shows Server Components, and not SSR. Because it doesn't have SSR, the initial page load in this demo has a client-server network waterfall, and **will be much slower than any SSR framework**. However, Server Components are meant to be integrated together with SSR, and they *will* be in a future release.
 * **This demo doesn’t have an efficient bundling strategy.** When you use Server Components, a bundler plugin will automatically split the client JS bundle. However, the way it's currently being split is not necessarily optimal. We are investigating more efficient ways to split the bundles, but they are out of scope of this demo.
-* **This demo doesn’t have partial refetching.** Currently, when you click on different “notes”, the entire app shell is refetched from the server. However, that’s not ideal: for example, it’s unnecessary to refetch the sidebar content if all that changed is the inner content of the right pane. Partial refetching is an [open area of research](https://github.com/josephsavona/rfcs/blob/server-components/text/0000-server-components.md#open-areas-of-research) and we don’t yet know how exactly it will work.
+* **This demo doesn’t have partial refetching.** Currently, when you click on different “notes”, the entire app shell is refetched from the server. However, that’s not ideal: for example, it’s unnecessary to refetch the sidebar content if all that changed is the inner content of the right pane. Partial refetching is an [open area of research](https://github.com/reactjs/rfcs/blob/main/text/0188-server-components.md#open-areas-of-research) and we don’t yet know how exactly it will work.
 
 This demo is provided “as is” to show the parts that are ready for experimentation. It is not intended to reflect the performance characteristics of a real app driven by a future stable release of Server Components.
 
 ## Setup
 
-You will need to have nodejs >=14.9.0 in order to run this demo. [Node 14 LTS](https://nodejs.org/en/about/releases/) is a good choice! (If you use `nvm`, run `nvm i` before running `npm install` to install the recommended Node version.)
+You will need to have [Node 18 LTS](https://nodejs.org/en) in order to run this demo. (If you use `nvm`, run `nvm i` before running `npm install` to install the recommended Node version.)
 
   ```
-  npm install
+  npm install --legacy-peer-deps
   npm start
   ```
 
@@ -125,13 +127,13 @@ This demo is built on top of our Webpack plugin, but this is not how we envision
 - Search for any title. With the search text still in the search input, create a new note with a title matching the search text. What happens?
 - Search while on Slow 3G, observe the inline loading indicator.
 - Switch between two notes back and forth. Observe we don't send new responses next time we switch them again.
-- Uncomment the `fetch('http://localhost:4000/sleep/....')` call in `Note.server.js` or `NoteList.server.js` to introduce an artificial delay and trigger Suspense.
-  - If you only uncomment it in `Note.server.js`, you'll see the fallback every time you open a note.
-  - If you only uncomment it in `NoteList.server.js`, you'll see the list fallback on first page load.
+- Uncomment the `await fetch('http://localhost:4000/sleep/....')` call in `Note.js` or `NoteList.js` to introduce an artificial delay and trigger Suspense.
+  - If you only uncomment it in `Note.js`, you'll see the fallback every time you open a note.
+  - If you only uncomment it in `NoteList.js`, you'll see the list fallback on first page load.
   - If you uncomment it in both, it won't be very interesting because we have nothing new to show until they both respond.
-- Add a new Server Component and place it above the search bar in `App.server.js`. Import `db` from `db.server` and use `db.query()` from it to get the number of notes. Oberserve what happens when you add or delete a note.
+- Add a new Server Component and place it above the search bar in `App.js`. Import `db` from `db.js` and use `await db.query()` from it to get the number of notes. Oberserve what happens when you add or delete a note.
 
-You can watch a [recorded walkthrough of all these demo points here](https://youtu.be/La4agIEgoNg?t=600) (with timestamps).
+You can watch a [recorded walkthrough of all these demo points here](https://youtu.be/La4agIEgoNg?t=600) with timestamps. (**Note:** this recording is slightly outdated because the repository has been updated to match the [latest conventions](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components).)
 
 ## Built by (A-Z)
 

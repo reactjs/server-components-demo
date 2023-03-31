@@ -6,15 +6,17 @@
  *
  */
 
-import {useState, useTransition} from 'react';
+'use client';
 
-import {useLocation} from './LocationContext.client';
+import {useState, useTransition} from 'react';
+import {useRouter} from './framework/router';
+
 import Spinner from './Spinner';
 
 export default function SearchField() {
   const [text, setText] = useState('');
   const [isSearching, startSearching] = useTransition();
-  const [, setLocation] = useLocation();
+  const {navigate} = useRouter();
   return (
     <form className="search" role="search" onSubmit={(e) => e.preventDefault()}>
       <label className="offscreen" htmlFor="sidebar-search-input">
@@ -28,10 +30,9 @@ export default function SearchField() {
           const newText = e.target.value;
           setText(newText);
           startSearching(() => {
-            setLocation((loc) => ({
-              ...loc,
+            navigate({
               searchText: newText,
-            }));
+            });
           });
         }}
       />

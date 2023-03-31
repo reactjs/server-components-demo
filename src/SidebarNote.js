@@ -8,9 +8,9 @@
 
 import {format, isToday} from 'date-fns';
 import excerpts from 'excerpts';
-import marked from 'marked';
+import {marked} from 'marked';
 
-import ClientSidebarNote from './SidebarNote.client';
+import SidebarNoteContent from './SidebarNoteContent';
 
 export default function SidebarNote({note}) {
   const updatedAt = new Date(note.updated_at);
@@ -19,7 +19,7 @@ export default function SidebarNote({note}) {
     : format(updatedAt, 'M/d/yy');
   const summary = excerpts(marked(note.body), {words: 20});
   return (
-    <ClientSidebarNote
+    <SidebarNoteContent
       id={note.id}
       title={note.title}
       expandedChildren={
@@ -29,6 +29,6 @@ export default function SidebarNote({note}) {
         <strong>{note.title}</strong>
         <small>{lastUpdatedAt}</small>
       </header>
-    </ClientSidebarNote>
+    </SidebarNoteContent>
   );
 }
