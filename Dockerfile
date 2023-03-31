@@ -1,10 +1,10 @@
-FROM node:14.15.3
+FROM node:lts-hydrogen
 
 WORKDIR /opt/notes-app
 
 COPY package.json package-lock.json ./
 
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 COPY . .
 
