@@ -14,7 +14,7 @@ const babelRegister = require('@babel/register');
 
 babelRegister({
   ignore: [/[\\\/](build|server|node_modules)[\\\/]/],
-  presets: [['react-app', {runtime: 'automatic'}]],
+  presets: [['@babel/preset-react', {runtime: 'automatic'}]],
   plugins: ['@babel/transform-modules-commonjs'],
 });
 
@@ -22,11 +22,11 @@ const express = require('express');
 const compress = require('compression');
 const {readFileSync} = require('fs');
 const {unlink, writeFile} = require('fs').promises;
-const {renderToPipeableStream} = require('react-server-dom-webpack/writer');
+const {renderToPipeableStream} = require('react-server-dom-webpack/server');
 const path = require('path');
 const {Pool} = require('pg');
 const React = require('react');
-const ReactApp = require('../src/App.server').default;
+const ReactApp = require('../src/App').default;
 
 // Don't keep credentials in the source tree in a real app!
 const pool = new Pool(require('../credentials'));

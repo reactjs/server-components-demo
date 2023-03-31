@@ -8,10 +8,10 @@
 
 import {Suspense} from 'react';
 
-import Note from './Note.server';
-import NoteList from './NoteList.server';
-import EditButton from './EditButton.client';
-import SearchField from './SearchField.client';
+import Note from './Note';
+import NoteList from './NoteList';
+import EditButton from './EditButton';
+import SearchField from './SearchField';
 import NoteSkeleton from './NoteSkeleton';
 import NoteListSkeleton from './NoteListSkeleton';
 

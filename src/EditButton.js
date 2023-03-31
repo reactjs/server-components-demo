@@ -6,13 +6,14 @@
  *
  */
 
-import {useTransition} from 'react';
+'use client';
 
-import {useLocation} from './LocationContext.client';
+import {useTransition} from 'react';
+import {useRouter} from './framework/router';
 
 export default function EditButton({noteId, children}) {
-  const [, setLocation] = useLocation();
   const [isPending, startTransition] = useTransition();
+  const {navigate} = useRouter();
   const isDraft = noteId == null;
   return (
     <button
@@ -23,11 +24,10 @@ export default function EditButton({noteId, children}) {
       disabled={isPending}
       onClick={() => {
         startTransition(() => {
-          setLocation((loc) => ({
+          navigate({
             selectedId: noteId,
             isEditing: true,
-            searchText: loc.searchText,
-          }));
+          });
         });
       }}
       role="menuitem">

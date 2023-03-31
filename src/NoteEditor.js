@@ -6,18 +6,17 @@
  *
  */
 
+'use client';
+
 import {useState, useTransition} from 'react';
-import {createFromReadableStream} from 'react-server-dom-webpack';
+import {useRouter, useMutation} from './framework/router';
 
 import NotePreview from './NotePreview';
-import {useRefresh} from './Cache.client';
-import {useLocation} from './LocationContext.client';
 
 export default function NoteEditor({noteId, initialTitle, initialBody}) {
-  const refresh = useRefresh();
   const [title, setTitle] = useState(initialTitle);
   const [body, setBody] = useState(initialBody);
-  const [location, setLocation] = useLocation();
+  const {location} = useRouter();
   const [isNavigating, startNavigating] = useTransition();
   const [isSaving, saveNote] = useMutation({
     endpoint: noteId !== null ? `/notes/${noteId}` : `/notes`,
@@ -35,8 +34,7 @@ export default function NoteEditor({noteId, initialTitle, initialBody}) {
       isEditing: false,
       searchText: location.searchText,
     };
-    const response = await saveNote(payload, requestedLocation);
-    navigate(response);
+    await saveNote(payload, requestedLocation);
   }
 
   async function handleDelete() {
@@ -46,18 +44,7 @@ export default function NoteEditor({noteId, initialTitle, initialBody}) {
       isEditing: false,
       searchText: location.searchText,
     };
-    const response = await deleteNote(payload, requestedLocation);
-    navigate(response);
-  }
-
-  function navigate(response) {
-    const cacheKey = response.headers.get('X-Location');
-    const nextLocation = JSON.parse(cacheKey);
-    const seededResponse = createFromReadableStream(response.body);
-    startNavigating(() => {
-      refresh(cacheKey, seededResponse);
-      setLocation(nextLocation);
-    });
+    await deleteNote(payload, requestedLocation);
   }
 
   const isDraft = noteId === null;
@@ -130,43 +117,4 @@ export default function NoteEditor({noteId, initialTitle, initialBody}) {
       </div>
     </div>
   );
-}
-
-function useMutation({endpoint, method}) {
-  const [isSaving, setIsSaving] = useState(false);
-  const [didError, setDidError] = useState(false);
-  const [error, setError] = useState(null);
-  if (didError) {
-    // Let the nearest error boundary handle errors while saving.
-    throw error;
-  }
-
-  async function performMutation(payload, requestedLocation) {
-    setIsSaving(true);
-    try {
-      const response = await fetch(
-        `${endpoint}?location=${encodeURIComponent(
-          JSON.stringify(requestedLocation)
-        )}`,
-        {
-          method,
-          body: JSON.stringify(payload),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(await response.text());
-      }
-      return response;
-    } catch (e) {
-      setDidError(true);
-      setError(e);
-    } finally {
-      setIsSaving(false);
-    }
-  }
-
-  return [isSaving, performMutation];
 }

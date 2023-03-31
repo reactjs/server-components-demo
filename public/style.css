@@ -592,7 +592,7 @@ ul.notes-list {
 /* https://codepen.io/mandelid/pen/vwKoe */
 .spinner {
   display: inline-block;
-  transition: opacity linear 0.1s;
+  transition: opacity linear 0.1s 0.2s;
   width: 20px;
   height: 20px;
   border: 3px solid rgba(80, 80, 80, 0.5);

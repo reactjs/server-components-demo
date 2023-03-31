@@ -6,6 +6,10 @@
  *
  */
 
+export default function NoteSkeleton({isEditing}) {
+  return isEditing ? <NoteEditorSkeleton /> : <NotePreviewSkeleton />;
+}
+
 function NoteEditorSkeleton() {
   return (
     <div
@@ -68,8 +72,4 @@ function NotePreviewSkeleton() {
       </div>
     </div>
   );
-}
-
-export default function NoteSkeleton({isEditing}) {
-  return isEditing ? <NoteEditorSkeleton /> : <NotePreviewSkeleton />;
 }
