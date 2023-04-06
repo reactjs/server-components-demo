@@ -10,7 +10,6 @@
 // Note: this code would usually be provided by a framework.
 // ---------------------------------------------------------
 
-import {useState, Suspense, use} from 'react';
 import {createRoot} from 'react-dom/client';
 import {ErrorBoundary} from 'react-error-boundary';
 import {Router} from './router'
