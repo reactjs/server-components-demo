@@ -113,7 +113,7 @@ export default function NoteEditor({noteId, initialTitle, initialBody}) {
           Preview
         </div>
         <h1 className="note-title">{title}</h1>
-        <NotePreview title={title} body={body} />
+        <NotePreview body={body} />
       </div>
     </div>
   );
