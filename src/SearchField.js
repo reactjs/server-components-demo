@@ -40,3 +40,5 @@ export default function SearchField() {
     </form>
   );
 }
+
+module.exports = module.exports.default

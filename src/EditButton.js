@@ -35,3 +35,5 @@ export default function EditButton({noteId, children}) {
     </button>
   );
 }
+
+module.exports = module.exports.default

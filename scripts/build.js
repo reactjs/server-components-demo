@@ -35,6 +35,9 @@ webpack(
         },
       ],
     },
+    optimization: {
+      splitChunks: false,
+    },
     plugins: [
       new HtmlWebpackPlugin({
         inject: true,

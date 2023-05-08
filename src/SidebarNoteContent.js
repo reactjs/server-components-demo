@@ -81,3 +81,5 @@ export default function SidebarNoteContent({id, title, children, expandedChildre
     </div>
   );
 }
+
+module.exports = module.exports.default

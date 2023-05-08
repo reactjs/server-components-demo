@@ -118,3 +118,5 @@ export default function NoteEditor({noteId, initialTitle, initialBody}) {
     </div>
   );
 }
+
+module.exports = module.exports.default
