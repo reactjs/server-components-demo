@@ -1,0 +1,13 @@
+diff --git a/cjs/react-server-dom-webpack-client.browser.development.js b/cjs/react-server-dom-webpack-client.browser.development.js
+index bc2bf7106366df38e04d705a950b4170ae01571f..f6df80dde6a5ddcc8356dddf98f6797fb70f2748 100644
+--- a/cjs/react-server-dom-webpack-client.browser.development.js
++++ b/cjs/react-server-dom-webpack-client.browser.development.js
+@@ -73,7 +73,7 @@ function preloadModule(metadata) {
+     var entry = chunkCache.get(chunkId);
+ 
+     if (entry === undefined) {
+-      var thenable = __webpack_chunk_load__(chunkId);
++      var thenable = __webpack_require__.e(chunkId);
+ 
+       promises.push(thenable); // $FlowFixMe[method-unbinding]
+ 

@@ -1,5 +1,10 @@
 lockfileVersion: '6.0'
 
+patchedDependencies:
+  react-server-dom-webpack@18.3.0-next-1308e49a6-20230330:
+    hash: 35t2xljbgkwm7z7qiqynmdxlku
+    path: patches/react-server-dom-webpack@18.3.0-next-1308e49a6-20230330.patch
+
 dependencies:
   '@babel/core':
     specifier: 7.21.3
@@ -63,7 +68,7 @@ dependencies:
     version: 3.1.4(react@18.3.0-next-1308e49a6-20230330)
   react-server-dom-webpack:
     specifier: 18.3.0-next-1308e49a6-20230330
-    version: 18.3.0-next-1308e49a6-20230330(react-dom@18.3.0-next-1308e49a6-20230330)(react@18.3.0-next-1308e49a6-20230330)(webpack@5.76.2)
+    version: 18.3.0-next-1308e49a6-20230330(patch_hash=35t2xljbgkwm7z7qiqynmdxlku)(react-dom@18.3.0-next-1308e49a6-20230330)(react@18.3.0-next-1308e49a6-20230330)(webpack@5.76.2)
   resolve:
     specifier: 1.22.1
     version: 1.22.1
@@ -2237,7 +2242,7 @@ packages:
       react: 18.3.0-next-1308e49a6-20230330
     dev: false
 
-  /react-server-dom-webpack@18.3.0-next-1308e49a6-20230330(react-dom@18.3.0-next-1308e49a6-20230330)(react@18.3.0-next-1308e49a6-20230330)(webpack@5.76.2):
+  /react-server-dom-webpack@18.3.0-next-1308e49a6-20230330(patch_hash=35t2xljbgkwm7z7qiqynmdxlku)(react-dom@18.3.0-next-1308e49a6-20230330)(react@18.3.0-next-1308e49a6-20230330)(webpack@5.76.2):
     resolution: {integrity: sha512-jos7PXPC3/7r8lDWGQm9Rwj+nqot6xVrhm51VObf7kj4KODeseYuNBUyUftO354TaKtMMAwDX9KpnmTfPTTi7g==}
     engines: {node: '>=0.10.0'}
     peerDependencies:
@@ -2252,6 +2257,7 @@ packages:
       react-dom: 18.3.0-next-1308e49a6-20230330(react@18.3.0-next-1308e49a6-20230330)
       webpack: 5.76.2
     dev: false
+    patched: true
 
   /react@18.3.0-next-1308e49a6-20230330:
     resolution: {integrity: sha512-kOdZHskH1EBCUvnOVHpyq5r88EOSFGwz+qqH0kElH6bbWHZhJRykGf8tHB7ci0m/oU5cfqGut4K04fqbSgVGNA==}

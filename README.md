@@ -119,6 +119,10 @@ Finally, run `npm run seed` to populate some data.
 
 And you're done!
 
+### Rspack related
+
+- Make sure you are using `pnpm`. I patched the `react-server-dom-webpack` package, you need pnpm to make the patch works.
+
 ## Notes about this app
 
 The demo is a note-taking app called **React Notes**. It consists of a few major parts:
