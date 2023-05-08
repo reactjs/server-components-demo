@@ -67,6 +67,17 @@ The app won't work until you set up the database, as described below.
 
 This demo uses Postgres. First, follow its [installation link](https://wiki.postgresql.org/wiki/Detailed_installation_guides) for your platform.
 
+### Use homebrew to install `Postgres` easily
+
+```bash
+brew install postgresql
+
+# start service
+brew services start postgresql
+```
+
+> https://wiki.postgresql.org/wiki/Homebrew
+
 Alternatively, you can check out this [fork](https://github.com/pomber/server-components-demo/) which will let you run the demo app without needing a database. However, you won't be able to execute SQL queries (but fetch should still work). There is also [another fork](https://github.com/prisma/server-components-demo) that uses Prisma with SQLite, so it doesn't require additional setup.
 
 The below example will set up the database for this app, assuming that you have a UNIX-like platform:
