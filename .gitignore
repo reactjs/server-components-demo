@@ -30,3 +30,6 @@ yarn-error.log*
 
 # vscode
 .vscode
+
+# webide
+.gitpod.yml

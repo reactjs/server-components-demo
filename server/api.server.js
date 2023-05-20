@@ -22,11 +22,16 @@ const express = require('express');
 const compress = require('compression');
 const {readFileSync} = require('fs');
 const {unlink, writeFile} = require('fs').promises;
+const nodefetch = require('node-fetch');
 const {renderToPipeableStream} = require('react-server-dom-webpack/server');
 const path = require('path');
 const {Pool} = require('pg');
 const React = require('react');
 const ReactApp = require('../src/App').default;
+
+// polyfill `fetch` on server
+globalThis.fetch = globalThis.fetch || nodefetch;
+
 
 // Don't keep credentials in the source tree in a real app!
 const pool = new Pool(require('../credentials'));

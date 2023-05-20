@@ -21,6 +21,7 @@
     "express": "^4.18.2",
     "html-webpack-plugin": "5.5.0",
     "marked": "^4.2.12",
+    "node-fetch": "^2.6.11",
     "nodemon": "^2.0.21",
     "pg": "^8.10.0",
     "react": "18.3.0-next-1308e49a6-20230330",
