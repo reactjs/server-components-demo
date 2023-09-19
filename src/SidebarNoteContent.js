@@ -11,7 +11,12 @@
 import {useState, useRef, useEffect, useTransition} from 'react';
 import {useRouter} from './framework/router';
 
-export default function SidebarNoteContent({id, title, children, expandedChildren}) {
+export default function SidebarNoteContent({
+  id,
+  title,
+  children,
+  expandedChildren,
+}) {
   const {location, navigate} = useRouter();
   const [isPending, startTransition] = useTransition();
   const [isExpanded, setIsExpanded] = useState(false);
