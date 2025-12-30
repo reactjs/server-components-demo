@@ -18,7 +18,7 @@
     "concurrently": "^7.6.0",
     "date-fns": "^2.29.3",
     "excerpts": "^0.0.3",
-    "express": "^4.18.2",
+    "express": "^4.22.1",
     "html-webpack-plugin": "5.5.0",
     "marked": "^4.2.12",
     "nodemon": "^2.0.21",
