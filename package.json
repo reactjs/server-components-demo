@@ -14,7 +14,7 @@
     "acorn-jsx": "^5.3.2",
     "acorn-loose": "^8.3.0",
     "babel-loader": "8.3.0",
-    "compression": "^1.7.4",
+    "compression": "^1.8.1",
     "concurrently": "^7.6.0",
     "date-fns": "^2.29.3",
     "excerpts": "^0.0.3",
