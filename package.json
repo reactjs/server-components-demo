@@ -31,7 +31,7 @@
     "rimraf": "^4.4.0",
     "sanitize-html": "^2.10.0",
     "server-only": "^0.0.1",
-    "webpack": "5.76.2"
+    "webpack": "5.105.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
