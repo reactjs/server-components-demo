@@ -13,7 +13,7 @@
     "@babel/register": "^7.21.0",
     "acorn-jsx": "^5.3.2",
     "acorn-loose": "^8.3.0",
-    "babel-loader": "8.3.0",
+    "babel-loader": "10.0.0",
     "compression": "^1.7.4",
     "concurrently": "^7.6.0",
     "date-fns": "^2.29.3",
@@ -31,7 +31,7 @@
     "rimraf": "^4.4.0",
     "sanitize-html": "^2.10.0",
     "server-only": "^0.0.1",
-    "webpack": "5.76.2"
+    "webpack": "5.105.2"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
